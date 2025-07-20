@@ -1,0 +1,6 @@
+@Paynext_HostAddress = http://localhost:5219
+
+GET {{Paynext_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
