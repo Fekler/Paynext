@@ -8,11 +8,15 @@
 
   <ItemGroup>
     <Folder Include="Dtos\" />
-    <Folder Include="Authentication\" />
     <Folder Include="Business\" />
     <Folder Include="Services\" />
     <Folder Include="UseCases\" />
     <Folder Include="Profiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetEnv" Version="3.1.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.12.1" />
   </ItemGroup>
 
   <ItemGroup>
