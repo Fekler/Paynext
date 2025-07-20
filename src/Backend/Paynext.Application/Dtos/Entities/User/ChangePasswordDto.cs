@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Paynext.Application.Dtos.Entities.User
 {
-    public class UpdateUserPasswordDto
+    public class ChangePasswordDto
     {
         [Required]
         [MinLength(Const.PASSWORD_MIN_LENGTH, ErrorMessage = "A senha deve ter pelo menos 8 caracteres.")]

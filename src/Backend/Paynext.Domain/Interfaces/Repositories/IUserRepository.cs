@@ -1,9 +1,10 @@
 ﻿using Paynext.Domain.Entities;
+using Paynext.Domain.Interfaces._bases;
 using static Paynext.Domain.Entities._bases.Enums;
 
 namespace Paynext.Domain.Interfaces.Repositories
 {
-    public interface IUserRepository
+    public interface IUserRepository : IRepositoryBase<User>
     {
         Task<User> GetByEmail(string email);
         Task<User> GetByDocument(string document);
