@@ -7,5 +7,11 @@
             Client,
             Admin
         }
+        public enum InstallmentStatus
+        {
+            Open = 0,
+            Paid = 1,
+            Cancelled = 2
+        }
     }
 }

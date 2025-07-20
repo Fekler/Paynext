@@ -12,19 +12,24 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Paynext/Paynext.csproj", "Paynext/"]
-RUN dotnet restore "./Paynext/Paynext.csproj"
+COPY ["src/Backend/Paynext.API/Paynext.API.csproj", "src/Backend/Paynext.API/"]
+COPY ["src/Backend/Paynext.IOC/Paynext.IOC.csproj", "src/Backend/Paynext.IOC/"]
+COPY ["src/Backend/Paynext.Infra/Paynext.Infra.csproj", "src/Backend/Paynext.Infra/"]
+COPY ["src/Backend/Paynext.Application/Paynext.Application.csproj", "src/Backend/Paynext.Application/"]
+COPY ["SharedKernel/SharedKernel.csproj", "SharedKernel/"]
+COPY ["src/Backend/Paynext.Domain/Paynext.Domain.csproj", "src/Backend/Paynext.Domain/"]
+RUN dotnet restore "./src/Backend/Paynext.API/Paynext.API.csproj"
 COPY . .
-WORKDIR "/src/Paynext"
-RUN dotnet build "./Paynext.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/src/Backend/Paynext.API"
+RUN dotnet build "./Paynext.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Esta fase é usada para publicar o projeto de serviço a ser copiado para a fase final
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Paynext.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Paynext.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # Esta fase é usada na produção ou quando executada no VS no modo normal (padrão quando não está usando a configuração de Depuração)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Paynext.dll"]
+ENTRYPOINT ["dotnet", "Paynext.API.dll"]

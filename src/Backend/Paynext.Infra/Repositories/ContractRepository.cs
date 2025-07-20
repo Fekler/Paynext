@@ -1,0 +1,35 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Paynext.Domain.Entities;
+using Paynext.Domain.Interfaces.Repositories;
+using Paynext.Infra.Context;
+using Paynext.Infra.Repositories._bases;
+
+namespace Paynext.Infra.Repositories
+{
+    public class ContractRepository(AppDbContext context) : RepositoryBase<Contract>(context), IContractRepository
+    {
+        public async Task<IEnumerable<Contract>> GetAllActiveContracts()
+        {
+            return await _dbSet
+                .Where(c => c.IsActive && !c.IsFinished)
+                .ToListAsync();
+        }
+        public async Task<Contract> GetByContractNumber(string contractNumber)
+        {
+            return await _dbSet
+                .Where(c => c.ContractNumber == contractNumber)
+                .Include(c => c.Installments)
+                    .ThenInclude(i => i.ActionedByUser)
+                .Include(c => c.User)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Contract>> GetByUserUuid(Guid userUuid)
+        {
+            return await _dbSet
+                .Where(c => c.UserUuid == userUuid)
+                .ToListAsync();
+        }
+
+    }
+}

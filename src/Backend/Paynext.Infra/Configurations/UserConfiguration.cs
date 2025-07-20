@@ -49,7 +49,25 @@ namespace Paynext.Infra.Configurations
                 .IsRequired()
                 .HasDefaultValue(true);
 
+            builder.HasMany(u => u.Contracts)
+                .WithOne(c => c.User)
+                .HasForeignKey(c => c.UserUuid)
+                .OnDelete(DeleteBehavior.SetNull)
+                .IsRequired(false);
 
+            builder.Property(u => u.ClientId)
+                .IsRequired(false)
+                .HasMaxLength(Const.STRING_MAX_LENGTH);
+
+            builder.Property(u => u.ForeignKey)
+                .IsRequired(false)
+                .HasMaxLength(Const.STRING_MAX_LENGTH);
+
+            builder.HasMany(u => u.ActionedInstallments)
+                .WithOne(i => i.ActionedByUser)
+                .HasForeignKey(i => i.ActionedByUserUuiD)
+                .OnDelete(DeleteBehavior.SetNull)
+                .IsRequired(false);
         }
     }
 }

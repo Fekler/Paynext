@@ -35,7 +35,7 @@ namespace Paynext.Application.Authentication
             {
                 Issuer = _issuer,
                 Audience = _audience,
-
+                
                 Subject = claims,
                 Expires = expiry,
                 SigningCredentials = creds

@@ -16,10 +16,14 @@ namespace Paynext.Domain.Entities
 
         public bool IsActive { get; set; } = true;
 
+        public string ClientId { get; set; }
+        public string ForeignKey { get; set; }
+        public ICollection<Contract> Contracts { get; set; } = [];
+
+        public ICollection<Installment> ActionedInstallments { get; set; } = [];
 
         public override void Validate()
         {
-            //InitializeEntity(UUID, CreateAt, Id);
 
             base.Validate();
 
