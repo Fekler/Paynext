@@ -1,6 +1,6 @@
 ﻿namespace Paynext.IOC
 {
-    public class Class1
+    public class Ioc
     {
 
     }

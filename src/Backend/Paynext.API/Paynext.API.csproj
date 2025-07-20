@@ -17,4 +17,8 @@
     <Folder Include="NovaPasta\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Paynext.IOC\Paynext.IOC.csproj" />
+  </ItemGroup>
+
 </Project>

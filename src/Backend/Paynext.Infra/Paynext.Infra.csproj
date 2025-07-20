@@ -6,4 +6,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Configurations\_bases\" />
+    <Folder Include="Context\" />
+    <Folder Include="Documents\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Repositories\_bases\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paynext.Application\Paynext.Application.csproj" />
+  </ItemGroup>
+
 </Project>

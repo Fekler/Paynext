@@ -1,13 +1,11 @@
 ﻿using Paynext.Domain.Entities._bases;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Paynext.Domain.Errors;
+using Paynext.Domain.Validations;
+using static Paynext.Domain.Entities._bases.Enums;
 
 namespace Paynext.Domain.Entities
 {
-    internal class User
+    public class User : EntityBase
     {
         public string FullName { get; set; }
         public string Email { get; set; }

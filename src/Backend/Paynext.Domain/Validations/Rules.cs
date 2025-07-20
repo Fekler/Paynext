@@ -26,13 +26,17 @@ namespace Paynext.Domain.Validations
                 return false;
             }
 
-            string passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$";
-            return Regex.IsMatch(password, passwordRegex);
+            //string passwordRegex = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]).{8,}$";
+            //return Regex.IsMatch(password, passwordRegex);
+            return PasswordRegex().IsMatch(password);
         }
 
+        [GeneratedRegex(@"^(?=.* [a-z])(?=.* [A-Z])(?=.*\d)(?=.* [!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]).{8,}$")]
+        private static partial Regex PasswordRegex();
 
         [GeneratedRegex(@"^(\d{2,3}|\(\d{2,3}\))?\s?\d{4,5}-?\d{4}$")]
         private static partial Regex PhoneNumberRegex();
+
         [GeneratedRegex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")]
         private static partial Regex EmailRegex();
 

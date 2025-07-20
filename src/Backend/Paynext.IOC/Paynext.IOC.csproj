@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Paynext.Infra\Paynext.Infra.csproj" />
+  </ItemGroup>
+
 </Project>
