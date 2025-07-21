@@ -9,6 +9,8 @@ namespace Paynext.Infra.Context
     public class AppDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
+        public DbSet<Contract> Contracts { get; set; }
+        public DbSet<Installment> Installments { get; set; }
 
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

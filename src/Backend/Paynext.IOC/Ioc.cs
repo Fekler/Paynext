@@ -31,6 +31,8 @@ namespace Paynext.IOC
         public static void ConfigureRepositories(this IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IContractRepository, ContractRepository>();
+            services.AddScoped<IInstallmentRepository, InstallmentRepository>();
 
         }
 
