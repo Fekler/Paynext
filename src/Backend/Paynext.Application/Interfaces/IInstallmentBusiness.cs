@@ -9,6 +9,6 @@ namespace Paynext.Application.Interfaces
     public interface IInstallmentBusiness : IBusinessBase<Installment, CreateInstallmentDto, UpdateInstallmentDto, InstallmentDto>
     {
         Task<Response<List<InstallmentDto>>> GetByContract(Guid contractUuid);
-        Task<Response<List<InstallmentDto>>> GetByContractAndStatus(Guid contractUuid, InstallmentStatus status);
+        Task<Response<List<InstallmentDto>>> GetAllByContractIdAndStatus(Guid contractUuid, InstallmentStatus status);
     }
 }

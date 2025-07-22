@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Paynext.Controllers
+namespace Paynext.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]

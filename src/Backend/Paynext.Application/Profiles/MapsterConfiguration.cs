@@ -30,7 +30,7 @@ namespace Paynext.Application.Profiles
 
             TypeAdapterConfig<CreateContractDto, Contract>.NewConfig()
                 .Map(dest => dest.ContractNumber, src => src.ContractNumber.Trim())
-                .Map(dest => dest.Description, src => src.Description?.Trim())
+                .Map(dest => dest.Description, src => src.Description.Trim())
                 .Map(dest => dest.InitialAmount, src => src.Amount)
                 .Map(dest => dest.StartDate, src => src.StartDate)
                 .Map(dest => dest.UserUuid, src => src.UserUuid)
@@ -40,7 +40,7 @@ namespace Paynext.Application.Profiles
             TypeAdapterConfig<UpdateContractDto, Contract>.NewConfig()
                 .Ignore(dest => dest.Id)
                 .Map(dest => dest.ContractNumber, src => src.ContractNumber.Trim())
-                .Map(dest => dest.Description, src => src.Description?.Trim())
+                .Map(dest => dest.Description, src => src.Description.Trim())
                 .Map(dest => dest.InitialAmount, src => src.Amount)
                 .Map(dest => dest.StartDate, src => src.StartDate)
                 .Map(dest => dest.EndDate, src => src.EndDate)
@@ -52,16 +52,17 @@ namespace Paynext.Application.Profiles
             #region Installment
             TypeAdapterConfig<InstallmentDto, Installment>.NewConfig().TwoWays();
             TypeAdapterConfig<CreateInstallmentDto, Installment>.NewConfig()
-                .Map(dest => dest.Amount, src => src.Amount)
+                //.Map(dest => dest.Amount, src => src.Amount)
                 .Map(dest => dest.DueDate, src => src.DueDate)
                 .Map(dest => dest.ContractUuid, src => src.ContractUuid)
                 .Map(dest => dest.UUID, src => Guid.NewGuid());
             TypeAdapterConfig<UpdateInstallmentDto, Installment>.NewConfig()
                 .Ignore(dest => dest.Id)
-                .Map(dest => dest.Amount, src => src.Amount)
+                //.Map(dest => dest.Amount, src => src.Amount)
                 .Map(dest => dest.DueDate, src => src.DueDate)
                 .Map(dest => dest.ContractUuid, src => src.ContractUuid)
                 .Map(dest => dest.UUID, src => src.Uuid);
+            #endregion
         }
     }
 }
