@@ -31,7 +31,7 @@ namespace Paynext.Domain.Validations
             return PasswordRegex().IsMatch(password);
         }
 
-        [GeneratedRegex(@"^(?=.* [a-z])(?=.* [A-Z])(?=.*\d)(?=.* [!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]).{8,}$")]
+        [GeneratedRegex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':""\\|,.<>/?]).{8,}$")]
         private static partial Regex PasswordRegex();
 
         [GeneratedRegex(@"^(\d{2,3}|\(\d{2,3}\))?\s?\d{4,5}-?\d{4}$")]

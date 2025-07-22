@@ -5,6 +5,7 @@ using Paynext.Application.Interfaces;
 using Paynext.Domain.Entities;
 using Paynext.Domain.Entities._bases;
 using Paynext.Domain.Interfaces.Repositories;
+using Paynext.Domain.Validations;
 using SharedKernel;
 using System;
 using System.Collections.Generic;
@@ -44,11 +45,16 @@ namespace Paynext.Application.Business
                 }
 
                 var user = createUserDto.Adapt<User>();
-                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password); // Hash da senha antes de salvar
                 user.Validate();
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password); // Hash da senha antes de salvar
                 await _userRepository.Add(user);
                 _logger.LogInformation($"Usuário criado com UUID: {user.UUID}");
                 return new Response<Guid>().Sucess(user.UUID, statusCode: HttpStatusCode.Created);
+            }
+            catch(DomainExceptionValidation ex)
+            {
+                return new Response<Guid>().Failure(default, message: ex.Message, statusCode: HttpStatusCode.BadRequest);
+
             }
             catch (Exception ex)
             {

@@ -40,7 +40,7 @@ namespace Paynext.Infra.Configurations
                 .IsRequired();
 
             builder.Property(c => c.IsFinished)
-                .IsRequired(false)
+                .IsRequired()
 
                 .HasDefaultValue(false);
             builder.Property(c => c.IsActive)

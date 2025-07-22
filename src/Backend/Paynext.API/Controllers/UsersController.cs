@@ -43,7 +43,7 @@ namespace Paynext.API.Controllers
         }
 
         [HttpGet("{id:int}")]
-        [Authorize(Roles = "Admin,Seller")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int id)
         {
             var response = await _userBusiness.Get(id);
@@ -51,7 +51,7 @@ namespace Paynext.API.Controllers
         }
 
         [HttpGet("{guid:guid}")]
-        [Authorize(Roles = "Admin,Seller")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(Guid guid)
         {
             var response = await _userBusiness.GetDto(guid);
@@ -79,6 +79,7 @@ namespace Paynext.API.Controllers
             return StatusCode((int)response.StatusCode, response.ApiReponse);
         }
 
+        [AllowAnonymous]
         [HttpPut("change-password")]
         [Authorize()]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)

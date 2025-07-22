@@ -21,12 +21,12 @@ namespace Paynext.API.Controllers
             var response = await _contractBusiness.Add(createContractDto);
             return StatusCode((int)response.StatusCode, response.ApiReponse);
         }
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> Get(int id)
-        {
-            var response = await _contractBusiness.Get(id);
-            return StatusCode((int)response.StatusCode, response.ApiReponse);
-        }
+        //[HttpGet("{id:int}")]
+        //public async Task<IActionResult> Get(int id)
+        //{
+        //    var response = await _contractBusiness.Get(id);
+        //    return StatusCode((int)response.StatusCode, response.ApiReponse);
+        //}
         [HttpGet("{guid:guid}")]
         public async Task<IActionResult> Get(Guid guid)
         {

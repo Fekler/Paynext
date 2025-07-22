@@ -7,6 +7,8 @@ namespace Paynext.Application.Interfaces
 {
     public interface IContractBusiness : IBusinessBase<Contract, CreateContractDto, UpdateContractDto, ContractDto>
     {
-         Task<Response<List<ContractDto>>> GetByUser(Guid userUuid);
+        Task<Response<List<ContractDto>>> GetByUser(Guid userUuid);
+        Task<Response<ContractDto>> GetFullInformation(Guid guid);
+
     }
 }

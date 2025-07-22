@@ -14,7 +14,7 @@ namespace Paynext.Domain.Entities
         public Contract Contract { get; set; }
         public bool IsAntecipated { get; set; } = false;
 
-        public Guid ActionedByUserUuiD { get; set; }
-        public User ActionedByUser { get; set; }
+        public Guid? ActionedByUserUuiD { get; set; }
+        public User? ActionedByUser { get; set; }
     }
 }

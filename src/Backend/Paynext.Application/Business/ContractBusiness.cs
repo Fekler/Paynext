@@ -146,6 +146,23 @@ namespace Paynext.Application.Business
                     .Failure(default, message: $"Error retrieving contracts for user with UUID {userUuid}: {ex.Message}", statusCode: HttpStatusCode.InternalServerError);
             }
         }
+        public async Task<Response<ContractDto>> GetFullInformation(Guid guid)
+        {
+            try
+            {
+                var contract = await _repository.GetFullInformationByUuid(guid);
+                var contractDto = contract.Adapt<ContractDto>();
+                return new Response<ContractDto>()
+                    .Sucess(data: contractDto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error retrieving contracts  with UUID {guid}.");
+                return new Response<ContractDto>()
+                    .Failure(default, message: $"Error retrieving contractswith UUID {guid}: {ex.Message}", statusCode: HttpStatusCode.InternalServerError);
+            }
+        }
 
         public async Task<Response<ContractDto>> GetDto(Guid guid)
         {

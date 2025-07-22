@@ -23,6 +23,15 @@ namespace Paynext.Infra.Repositories
                 .Include(c => c.User)
                 .FirstOrDefaultAsync();
         }
+        public async Task<Contract> GetFullInformationByUuid(Guid uuid)
+        {
+            return await _dbSet
+                .Where(c => c.UUID == uuid)
+                .Include(c => c.Installments)
+                    .ThenInclude(i => i.ActionedByUser)
+                .Include(c => c.User)
+                .FirstOrDefaultAsync();
+        }
 
         public async Task<IEnumerable<Contract>> GetByUserUuid(Guid userUuid)
         {
