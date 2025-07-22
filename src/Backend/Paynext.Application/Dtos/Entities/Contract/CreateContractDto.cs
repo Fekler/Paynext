@@ -7,6 +7,7 @@ namespace Paynext.Application.Dtos.Entities.Contract
         [Required]
         public string ContractNumber { get; set; }
         public string Description { get; set; }
+        public decimal Amount { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public Guid UserUuid { get; set; }

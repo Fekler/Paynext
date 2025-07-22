@@ -1,11 +1,13 @@
-﻿using Paynext.Domain.Entities._bases;
+﻿using Paynext.Application.Dtos.Entities.Installment;
+using Paynext.Application.Dtos.Entities.User;
 
-namespace Paynext.Domain.Entities
+
+namespace Paynext.Application.Dtos.Entities.Contract
 {
-    public class Contract : EntityBase
+    public class ContractDto
     {
+        public Guid Uuid { get; set; }
         public string ContractNumber { get; set; }
-        public string Description { get; set; }
         public Guid UserUuid { get; set; }
         public decimal InitialAmount { get; set; }
         public decimal RemainingValue { get; set; }
@@ -14,8 +16,8 @@ namespace Paynext.Domain.Entities
         public bool IsFinished { get; set; } = false;
         public bool IsActive { get; set; } = true;
 
-        public User User { get; set; }
+        public UserDto User { get; set; }
 
-        public ICollection<Installment> Installments { get; set; } = [];
+        public ICollection<InstallmentDto> Installments { get; set; } = [];
     }
 }

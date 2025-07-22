@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Paynext.Application.Dtos.Entities.Installment
+namespace Paynext.Application.Business
 {
-    internal class GetInstallmentDto
+    public class InstallmentBusiness
     {
     }
 }

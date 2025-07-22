@@ -3,6 +3,7 @@ using Paynext.Domain.Entities;
 using Paynext.Domain.Interfaces.Repositories;
 using Paynext.Infra.Context;
 using Paynext.Infra.Repositories._bases;
+using static Paynext.Domain.Entities._bases.Enums;
 
 namespace Paynext.Infra.Repositories
 {
@@ -11,6 +12,12 @@ namespace Paynext.Infra.Repositories
         public async Task<IEnumerable<Installment>> GetAllByContractId(Guid contractUuid)
         {
             return await _dbSet.Where(i => i.ContractUuid == contractUuid)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Installment>> GetAllByContractIdAndStatus(Guid contractUuid, InstallmentStatus status)
+        {
+            return await _dbSet.Where(i => i.ContractUuid == contractUuid && i.Status == status)
                 .ToListAsync();
         }
     }

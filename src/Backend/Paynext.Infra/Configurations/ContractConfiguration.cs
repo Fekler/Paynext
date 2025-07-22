@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Paynext.Domain.Entities;
 using Paynext.Domain.Entities._bases;
 using Paynext.Infra.Configurations._bases;
@@ -7,7 +8,7 @@ namespace Paynext.Infra.Configurations
 {
     public class ContractConfiguration : EntityBaseConfiguration<Contract>
     {
-        public override void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Contract> builder)
+        public override void Configure(EntityTypeBuilder<Contract> builder)
         {
             TableName = "Contracts";
 
@@ -17,6 +18,10 @@ namespace Paynext.Infra.Configurations
                 .IsRequired()
                 .HasMaxLength(Const.STRING_MAX_LENGTH);
 
+            builder.Property(c => c.Description)
+                .IsRequired(false)
+                .HasMaxLength(Const.STRING_MAX_LENGTH);
+
             builder.Property(c => c.InitialAmount)
                 .IsRequired()
                 .HasPrecision(18, 2);
@@ -24,6 +29,9 @@ namespace Paynext.Infra.Configurations
             builder.Property(c => c.RemainingValue)
                 .IsRequired()
                 .HasPrecision(18, 2);
+
+            builder.Property(c => c.UserUuid)
+                .IsRequired();
 
             builder.Property(c => c.StartDate)
                 .IsRequired();
@@ -42,6 +50,11 @@ namespace Paynext.Infra.Configurations
             builder.HasMany(c => c.Installments)
                 .WithOne(i => i.Contract)
                 .HasForeignKey(i => i.ContractUuid)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(builder => builder.User)
+                .WithMany(user => user.Contracts)
+                .HasForeignKey(c => c.UserUuid)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

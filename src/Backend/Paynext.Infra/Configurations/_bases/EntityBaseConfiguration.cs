@@ -9,7 +9,7 @@ namespace Paynext.Infra.Configurations._bases
         protected string TableName { get; set; } = string.Empty;
         public virtual void Configure(EntityTypeBuilder<T> builder)
         {
-            builder.ToTable(TableName);
+            builder.ToTable(TableName.ToUpper());
 
             builder.HasKey(e => e.UUID);
 
