@@ -10,5 +10,6 @@ namespace Paynext.Application.Interfaces
         Task<Response<List<ContractDto>>> GetByUser(Guid userUuid);
         Task<Response<ContractDto>> GetFullInformation(Guid guid);
 
+        Task<Response<List<ContractDto>>> GetAllFullInformation();
     }
 }

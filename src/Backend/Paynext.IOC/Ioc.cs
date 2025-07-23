@@ -40,6 +40,8 @@ namespace Paynext.IOC
         {
 
             services.AddScoped<IUserBusiness, UserBusiness>();
+            services.AddScoped<IContractBusiness, ContractBusiness>();
+            services.AddScoped<IInstallmentBusiness, InstallmentBusiness>();
 
         }
 
@@ -56,6 +58,7 @@ namespace Paynext.IOC
         public static void ConfigureValidators(this IServiceCollection services)
         {
             //services.AddSingleton<IValidatorProvider, ValidatorFactory>();
+            services.AddScoped<IPayManagement,PayManagement>();
         }
 
         public static void ConfigureUseCases(this IServiceCollection services)

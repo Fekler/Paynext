@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Paynext.Application.UseCases
 {
-    public class PayManagement(IContractBusiness contractBusiness, IInstallmentBusiness installmentBusiness, IUserBusiness userBusiness)
+    public class PayManagement(IContractBusiness contractBusiness, IInstallmentBusiness installmentBusiness, IUserBusiness userBusiness) : IPayManagement
     {
         private readonly IContractBusiness _contractBusiness = contractBusiness;
         private readonly IInstallmentBusiness _installmentBusiness = installmentBusiness;

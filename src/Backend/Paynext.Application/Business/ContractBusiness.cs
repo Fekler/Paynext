@@ -1,7 +1,6 @@
 ﻿using Mapster;
 using Microsoft.Extensions.Logging;
 using Paynext.Application.Dtos.Entities.Contract;
-using Paynext.Application.Dtos.Entities.Installment;
 using Paynext.Application.Interfaces;
 using Paynext.Domain.Entities;
 using Paynext.Domain.Interfaces.Repositories;
@@ -161,6 +160,32 @@ namespace Paynext.Application.Business
                 _logger.LogError(ex, $"Error retrieving contracts  with UUID {guid}.");
                 return new Response<ContractDto>()
                     .Failure(default, message: $"Error retrieving contractswith UUID {guid}: {ex.Message}", statusCode: HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<Response<List<ContractDto>>> GetAllFullInformation()
+        {
+            try
+            {
+                //if (uuid.HasValue)
+                //{
+                //    var contract = await _repository.GetAllFullInformationByUuid(uuid.Value);
+                //    var contractDto = contract.Adapt<ContractDto>();
+                //    List<ContractDto> data = [contractDto];
+                //    return new Response<List<ContractDto>>()
+                //        .Sucess(data: data, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
+                //}
+                var contracts = await _repository.GetAllFullInformation();
+                var contracstDto = contracts.Adapt<List<ContractDto>>();
+                return new Response<List<ContractDto>>()
+                    .Sucess(data: contracstDto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error retrieving contracts");
+                return new Response<List<ContractDto>>()
+                    .Failure(default, message: $"Error retrieving {ex.Message}", statusCode: HttpStatusCode.InternalServerError);
             }
         }
 

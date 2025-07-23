@@ -14,7 +14,7 @@ namespace Paynext.API.Controllers
         private readonly IUserBusiness _userBusiness = userBusiness;
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Add([FromBody] CreateUserDto createUserDto)
         {
             if (!ModelState.IsValid)
