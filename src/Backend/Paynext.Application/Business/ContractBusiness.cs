@@ -35,6 +35,7 @@ namespace Paynext.Application.Business
                     {
                         ContractUuid = contract.UUID,
                         DueDate = contract.StartDate.AddMonths(i + 1),
+                        InstallmentId = $"{contract.UUID:N}_P{i+1}",
                         Value = contract.InitialAmount / dto.InstallmentCount,
                         Status = Domain.Entities._bases.Enums.InstallmentStatus.Open,
                         UUID = Guid.NewGuid(),

@@ -17,13 +17,13 @@ namespace Paynext.Application.Profiles
             TypeAdapterConfig<CreateUserDto, User>.NewConfig()
                 .Map(dest => dest.FullName, src => src.FullName.Trim())
                 .Map(dest => dest.IsActive, src => true)
-                .Map(dest => dest.CreateAt, src => DateTime.UtcNow)
+                .Map(dest => dest.CreateAt, src => DateTime.Now.ToUniversalTime())
                 .Map(dest => dest.UUID, src => Guid.NewGuid());
 
             TypeAdapterConfig<UpdateUserDto, User>.NewConfig()
                 .Ignore(dest => dest.Id)
                 .Ignore(dest => dest.CreateAt)
-                .Map(dest => dest.UpdateAt, src => DateTime.UtcNow);
+                .Map(dest => dest.UpdateAt, src => DateTime.Now.ToUniversalTime());
 
             #endregion
             #region Contract
@@ -67,7 +67,7 @@ namespace Paynext.Application.Profiles
                 //.Map(dest => dest.Amount, src => src.Amount)
                 .Map(dest => dest.DueDate, src => src.DueDate.ToUniversalTime())
                 .Map(dest => dest.ContractUuid, src => src.ContractUuid)
-                .Map(dest => dest.CreateAt, src => DateTime.UtcNow)
+                .Map(dest => dest.CreateAt, src => DateTime.Now.ToUniversalTime())
                 .Map(dest => dest.UUID, src => Guid.NewGuid());
             TypeAdapterConfig<UpdateInstallmentDto, Installment>.NewConfig()
                 .Ignore(dest => dest.Id)
