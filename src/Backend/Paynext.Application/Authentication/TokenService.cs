@@ -22,7 +22,6 @@ namespace Paynext.Application.Authentication
 
         public async Task<AuthenticationResponse> GenerateJwtToken(UserAuthenticateJWT userAuthenticateJwt)
         {
-            Env.TraversePath().Load();
             _jwtKey= Environment.GetEnvironmentVariable("TOKEN_JWT_SECRET") ?? _configuration["Jwt:Key"];
             _issuer= Environment.GetEnvironmentVariable("API_URL") ?? _configuration["Jwt:Issuer"];
             _audience = Environment.GetEnvironmentVariable("APP_URL") ?? _configuration["Jwt:Audience"];

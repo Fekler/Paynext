@@ -3,6 +3,12 @@ import { TextField, Button, Typography, Alert } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import api from '../api';
 import { loginSuccess } from '../authSlice';
+import { jwtDecode } from 'jwt-decode';
+
+interface JwtPayload {
+  role: string;
+  [key: string]: any;
+}
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -17,7 +23,11 @@ const LoginPage: React.FC = () => {
     setError('');
     try {
       const response = await api.post('api/auth/login', { email, password });
-      dispatch(loginSuccess({ token: response.data.token, user: response.data.user }));
+      const token = response.data.data.accessToken;
+      const decoded = jwtDecode<JwtPayload>(token);
+      const role = decoded.role;
+      dispatch(loginSuccess({ token, user: { email, role } }));
+      // Aqui futuramente podemos redirecionar baseado no perfil
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erro ao autenticar');
     } finally {

@@ -39,7 +39,11 @@ namespace Paynext.Infra.Context
                 // Usado dessa maneira somente para usar os migrations.
                 Env.TraversePath().Load();
 
-                string connectString = Environment.GetEnvironmentVariable("DATABASE_URL");
+                string? connectString = Environment.GetEnvironmentVariable("DATABASE_URL");
+                if (string.IsNullOrWhiteSpace(connectString))
+                {
+                    throw new InvalidOperationException("A variável de ambiente DATABASE_URL não está definida.");
+                }
                 optionsBuilder.UseNpgsql(connectString,
                     npgsqlOptionsAction: sqlOptions =>
                     {
