@@ -17,6 +17,7 @@ namespace Paynext.API.Controllers
         private readonly IContractBusiness _contractBusiness = contractBusiness;
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Client")]
         public async Task<IActionResult> Add([FromBody] CreateContractDto createContractDto)
         {
             if (!ModelState.IsValid)
@@ -32,10 +33,17 @@ namespace Paynext.API.Controllers
         //    var response = await _contractBusiness.Get(id);
         //    return StatusCode((int)response.StatusCode, response.ApiReponse);
         //}
+        [Authorize(Roles = "Admin,Client")]
         [HttpGet("{guid:guid}")]
         public async Task<IActionResult> Get(Guid guid)
         {
-            var response = await _contractBusiness.GetFullInformation(guid);
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+            {
+                return Unauthorized(Error.UNAUTHORIZED);
+            }
+
+            var response = await _contractBusiness.GetFullInformation(guid, userId, admin: HttpContext.User.IsInRole("Admin"));
             return StatusCode((int)response.StatusCode, response.ApiReponse);
         }
 
@@ -56,12 +64,13 @@ namespace Paynext.API.Controllers
             if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
             {
                 return Unauthorized(Error.UNAUTHORIZED);
-            }if (HttpContext.User.IsInRole("Client"))
+            }
+            if (HttpContext.User.IsInRole("Client"))
             {
                 var responseClient = await _contractBusiness.GetByUser(userId);
                 return StatusCode((int)responseClient.StatusCode, responseClient.ApiReponse);
             }
-            var response = await _contractBusiness.GetAllFullInformation();
+            var response = await _contractBusiness.GetAllDto();
             return StatusCode((int)response.StatusCode, response.ApiReponse);
         }
 

@@ -175,7 +175,7 @@ namespace Paynext.Application.Business
         {
             try
             {
-                var installment = await _repository.Get(dto.Uuid);
+                var installment = await _repository.Get(dto.UUID);
                 if (installment == null)
                 {
                     return new Response<bool>().Failure(false, message: "Installment not found", statusCode: System.Net.HttpStatusCode.NotFound);
@@ -187,7 +187,7 @@ namespace Paynext.Application.Business
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error updating installment with UUID {dto.Uuid}.");
+                _logger.LogError(ex, $"Error updating installment with UUID {dto.UUID}.");
                 return new Response<bool>().Failure(false, message: $"Error updating installment: {ex.Message}", statusCode: System.Net.HttpStatusCode.InternalServerError);
             }
         }

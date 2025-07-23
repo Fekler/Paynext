@@ -146,11 +146,20 @@ namespace Paynext.Application.Business
                     .Failure(default, message: $"Error retrieving contracts for user with UUID {userUuid}: {ex.Message}", statusCode: HttpStatusCode.InternalServerError);
             }
         }
-        public async Task<Response<ContractDto>> GetFullInformation(Guid guid)
+        public async Task<Response<ContractDto>> GetFullInformation(Guid contractUuid, Guid userUuid, bool admin = false)
         {
             try
             {
-                var contract = await _repository.GetFullInformationByUuid(guid);
+                if (!admin)
+                {
+                    var contractSearch = await _repository.GetFullInformationByUuid(contractUuid);
+                    if(contractSearch.UserUuid != userUuid)
+                    {
+                        return new Response<ContractDto>()
+                            .Failure(default, message: $"Contrato {contractUuid} Não visivel para seu usuario.", statusCode: HttpStatusCode.Forbidden);
+                    }
+                }
+                var contract = await _repository.GetFullInformationByUuid(contractUuid);
                 var contractDto = contract.Adapt<ContractDto>();
                 return new Response<ContractDto>()
                     .Sucess(data: contractDto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
@@ -158,9 +167,9 @@ namespace Paynext.Application.Business
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error retrieving contracts  with UUID {guid}.");
+                _logger.LogError(ex, $"Error retrieving contracts  with UUID {contractUuid}.");
                 return new Response<ContractDto>()
-                    .Failure(default, message: $"Error retrieving contractswith UUID {guid}: {ex.Message}", statusCode: HttpStatusCode.InternalServerError);
+                    .Failure(default, message: $"Error retrieving contractswith UUID {contractUuid}: {ex.Message}", statusCode: HttpStatusCode.InternalServerError);
             }
         }
 
@@ -189,12 +198,37 @@ namespace Paynext.Application.Business
                     .Failure(default, message: $"Error retrieving {ex.Message}", statusCode: HttpStatusCode.InternalServerError);
             }
         }
+        public async Task<Response<List<ContractDto>>> GetAllDto()
+        {
+            try
+            {
+                //if (uuid.HasValue)
+                //{
+                //    var contract = await _repository.GetAllFullInformationByUuid(uuid.Value);
+                //    var contractDto = contract.Adapt<ContractDto>();
+                //    List<ContractDto> data = [contractDto];
+                //    return new Response<List<ContractDto>>()
+                //        .Sucess(data: data, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
+                //}
+                var contracts = await _repository.GetAllActiveContracts();
+                var contracstDto = contracts.Adapt<List<ContractDto>>();
+                return new Response<List<ContractDto>>()
+                    .Sucess(data: contracstDto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error retrieving contracts");
+                return new Response<List<ContractDto>>()
+                    .Failure(default, message: $"Error retrieving {ex.Message}", statusCode: HttpStatusCode.InternalServerError);
+            }
+        }
 
         public async Task<Response<ContractDto>> GetDto(Guid guid)
         {
             try
             {
-                var contract = await _repository.Get(guid);
+                var contract = await _repository.GetFullInformationByUuid(guid);
                 if (contract == null)
                 {
                     return new Response<ContractDto>()
@@ -236,34 +270,39 @@ namespace Paynext.Application.Business
         {
             try
             {
-                var contractEntity = await _repository.Get(dto.Uuid);
+                var contractEntity = await _repository.Get(dto.UUID);
                 if (contractEntity == null)
                 {
                     return new Response<bool>()
-                        .Failure(false, message: $"Contract with UUID {dto.Uuid} not found.", statusCode: HttpStatusCode.NotFound);
+                        .Failure(false, message: $"Contract with UUID {dto.UUID} not found.", statusCode: HttpStatusCode.NotFound);
                 }
                 var contract = dto.Adapt(contractEntity);
                 contract.Validate();
                 var updated = await _repository.Update(contract);
                 if (updated)
                 {
-                    _logger.LogInformation($"Contract with UUID {dto.Uuid} updated successfully.");
+                    _logger.LogInformation($"Contract with UUID {dto.UUID} updated successfully.");
                     return new Response<bool>()
                         .Sucess(data: true, message: "Contract updated successfully", statusCode: HttpStatusCode.OK);
                 }
                 else
                 {
-                    _logger.LogWarning($"Failed to update contract with UUID {dto.Uuid}.");
+                    _logger.LogWarning($"Failed to update contract with UUID {dto.UUID}.");
                     return new Response<bool>()
                         .Failure(false, message: "Failed to update contract", statusCode: HttpStatusCode.InternalServerError);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error updating contract with UUID {dto.Uuid}.");
+                _logger.LogError(ex, $"Error updating contract with UUID {dto.UUID}.");
                 return new Response<bool>()
-                    .Failure(false, message: $"Error updating contract with UUID {dto.Uuid}: {ex.Message}", statusCode: HttpStatusCode.InternalServerError);
+                    .Failure(false, message: $"Error updating contract with UUID {dto.UUID}: {ex.Message}", statusCode: HttpStatusCode.InternalServerError);
             }
+        }
+
+        public Task<Response<List<ContractDto>>> GetAllByUserFullInformation(Guid userUuid)
+        {
+            throw new NotImplementedException();
         }
     }
 }

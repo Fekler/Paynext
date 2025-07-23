@@ -7,14 +7,18 @@ import ContractFormModal from './ContractFormModal';
 interface Contract {
   uuid: string;
   contractNumber: string;
-  description?: string;
-  amount: number;
-  startDate: string;
-  endDate?: string;
-  installmentCount: number;
   userUuid: string;
+  initialAmount: number;
+  remainingValue: number;
+  startDate: string;
+  endDate: string;
+  isFinished: boolean;
   isActive: boolean;
-  clientId?: string;
+  user: {
+    fullName: string;
+    email: string;
+  };
+  installments: any[];
 }
 
 const ContractsList: React.FC = () => {
@@ -91,8 +95,8 @@ const ContractsList: React.FC = () => {
           <TableHead>
             <TableRow>
               <TableCell>Número</TableCell>
-              <TableCell>Descrição</TableCell>
-              <TableCell>Valor</TableCell>
+              <TableCell>Cliente</TableCell>
+              <TableCell>Valor Inicial</TableCell>
               <TableCell>Parcelas</TableCell>
               <TableCell>Início</TableCell>
               <TableCell>Fim</TableCell>
@@ -104,9 +108,9 @@ const ContractsList: React.FC = () => {
             {contracts.map((contract) => (
               <TableRow key={contract.uuid}>
                 <TableCell>{contract.contractNumber}</TableCell>
-                <TableCell>{contract.description}</TableCell>
-                <TableCell>{contract.amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</TableCell>
-                <TableCell>{contract.installmentCount}</TableCell>
+                <TableCell>{contract.user?.fullName}</TableCell>
+                <TableCell>{contract.initialAmount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</TableCell>
+                <TableCell>{contract.installments?.length ?? 0}</TableCell>
                 <TableCell>{contract.startDate && new Date(contract.startDate).toLocaleDateString()}</TableCell>
                 <TableCell>{contract.endDate && new Date(contract.endDate).toLocaleDateString()}</TableCell>
                 <TableCell>{contract.isActive ? 'Sim' : 'Não'}</TableCell>

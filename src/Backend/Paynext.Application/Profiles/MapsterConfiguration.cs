@@ -50,7 +50,7 @@ namespace Paynext.Application.Profiles
                 .Map(dest => dest.UserUuid, src => src.UserUuid)
                 .Map(dest => dest.IsActive, src => true)
                 .Map(dest => dest.UpdateAt, src => DateTime.UtcNow)
-                .Map(dest => dest.UUID, src => src.Uuid);
+                .Map(dest => dest.UUID, src => src.UUID);
 
             TypeAdapterConfig<Contract, ContractInformationDto>.NewConfig()
                 .Map(dest => dest.ClientId, src => src.UserUuid)
@@ -75,7 +75,7 @@ namespace Paynext.Application.Profiles
                 .Map(dest => dest.DueDate, src => src.DueDate.ToUniversalTime())
                 .Map(dest => dest.ContractUuid, src => src.ContractUuid)
                 .Map(dest => dest.UpdateAt, src => DateTime.UtcNow)
-                .Map(dest => dest.UUID, src => src.Uuid);
+                .Map(dest => dest.UUID, src => src.UUID);
 
             TypeAdapterConfig<Installment, InstallmentInformationDto>.NewConfig()
                 .Map(dest => dest.InstallmentId, src => src.UUID)
