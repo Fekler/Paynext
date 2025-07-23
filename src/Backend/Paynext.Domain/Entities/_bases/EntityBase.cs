@@ -23,7 +23,7 @@ namespace Paynext.Domain.Entities._bases
             RuleValidator.Build()
                 .When(Id < 0, Error.INVALID_ID)
                 .When(UUID == Guid.Empty, Error.INVALID_UUID)
-                .When(Id > 0 && CreateAt == default, Error.INVALID_DATE)
+                //.When(Id > 0 && CreateAt == default, Error.INVALID_DATE)
                 .ThrowExceptionIfExists();
         }
     }
