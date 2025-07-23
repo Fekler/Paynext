@@ -24,13 +24,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 
 // ... restante do código ...
-
-var app = builder.Build();
-
-// ... antes de app.UseAuthorization();
-app.UseCors("AllowAll");
-
-// ... restante do código ...
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c=>
@@ -102,6 +95,7 @@ var app = builder.Build();
 //}
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 
