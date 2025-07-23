@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LoginPage from './pages/login';
 import Navbar from './Navbar';
 import UsuariosList from './pages/UsuariosList';
+import ContractsList from './pages/ContractsList';
 import { useSelector } from 'react-redux';
 import type { RootState } from './store';
 
@@ -23,6 +24,11 @@ function App() {
         <Route path="/usuarios" element={
           <ProtectedRoute allowedRoles={["Admin"]}>
             <UsuariosList />
+          </ProtectedRoute>
+        } />
+        <Route path="/contratos" element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <ContractsList />
           </ProtectedRoute>
         } />
         <Route path="*" element={<Navigate to={user ? (user.role === 'Admin' ? '/usuarios' : '/meu-contrato') : '/login'} replace />} />

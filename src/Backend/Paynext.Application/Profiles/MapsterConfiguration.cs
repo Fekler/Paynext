@@ -33,9 +33,11 @@ namespace Paynext.Application.Profiles
                 .Map(dest => dest.ContractNumber, src => src.ContractNumber.Trim())
                 .Map(dest => dest.Description, src => src.Description.Trim())
                 .Map(dest => dest.InitialAmount, src => src.Amount)
-                .Map(dest => dest.StartDate, src => src.StartDate)
+                .Map(dest => dest.StartDate, src => src.StartDate.ToUniversalTime())
+                .Map(dest => dest.EndDate, src => src.EndDate.Value.ToUniversalTime())
                 .Map(dest => dest.UserUuid, src => src.UserUuid)
                 .Map(dest => dest.IsActive, src => true)
+                .Map(dest => dest.CreateAt, src => DateTime.UtcNow)
                 .Map(dest => dest.UUID, src => Guid.NewGuid());
 
             TypeAdapterConfig<UpdateContractDto, Contract>.NewConfig()
@@ -43,10 +45,11 @@ namespace Paynext.Application.Profiles
                 .Map(dest => dest.ContractNumber, src => src.ContractNumber.Trim())
                 .Map(dest => dest.Description, src => src.Description.Trim())
                 .Map(dest => dest.InitialAmount, src => src.Amount)
-                .Map(dest => dest.StartDate, src => src.StartDate)
-                .Map(dest => dest.EndDate, src => src.EndDate)
+                .Map(dest => dest.StartDate, src => src.StartDate.ToUniversalTime())
+                .Map(dest => dest.EndDate, src => src.EndDate.Value.ToUniversalTime())
                 .Map(dest => dest.UserUuid, src => src.UserUuid)
                 .Map(dest => dest.IsActive, src => true)
+                .Map(dest => dest.UpdateAt, src => DateTime.UtcNow)
                 .Map(dest => dest.UUID, src => src.Uuid);
 
             TypeAdapterConfig<Contract, ContractInformationDto>.NewConfig()
@@ -62,14 +65,16 @@ namespace Paynext.Application.Profiles
             TypeAdapterConfig<InstallmentDto, Installment>.NewConfig().TwoWays();
             TypeAdapterConfig<CreateInstallmentDto, Installment>.NewConfig()
                 //.Map(dest => dest.Amount, src => src.Amount)
-                .Map(dest => dest.DueDate, src => src.DueDate)
+                .Map(dest => dest.DueDate, src => src.DueDate.ToUniversalTime())
                 .Map(dest => dest.ContractUuid, src => src.ContractUuid)
+                .Map(dest => dest.CreateAt, src => DateTime.UtcNow)
                 .Map(dest => dest.UUID, src => Guid.NewGuid());
             TypeAdapterConfig<UpdateInstallmentDto, Installment>.NewConfig()
                 .Ignore(dest => dest.Id)
                 //.Map(dest => dest.Amount, src => src.Amount)
-                .Map(dest => dest.DueDate, src => src.DueDate)
+                .Map(dest => dest.DueDate, src => src.DueDate.ToUniversalTime())
                 .Map(dest => dest.ContractUuid, src => src.ContractUuid)
+                .Map(dest => dest.UpdateAt, src => DateTime.UtcNow)
                 .Map(dest => dest.UUID, src => src.Uuid);
 
             TypeAdapterConfig<Installment, InstallmentInformationDto>.NewConfig()
