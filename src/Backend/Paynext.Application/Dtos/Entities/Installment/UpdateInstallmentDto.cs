@@ -5,7 +5,7 @@ namespace Paynext.Application.Dtos.Entities.Installment
 {
     public class UpdateInstallmentDto
     {
-        public Guid Uuid { get; set; }
+        public Guid UUID { get; set; }
         [Required]
         public Guid ContractUuid { get; set; }
         public decimal Value { get; set; }

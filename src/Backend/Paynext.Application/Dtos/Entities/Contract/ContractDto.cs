@@ -6,7 +6,7 @@ namespace Paynext.Application.Dtos.Entities.Contract
 {
     public class ContractDto
     {
-        public Guid Uuid { get; set; }
+        public Guid UUID { get; set; }
         public string ContractNumber { get; set; }
         public Guid UserUuid { get; set; }
         public decimal InitialAmount { get; set; }

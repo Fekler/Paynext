@@ -5,7 +5,7 @@ namespace Paynext.Application.Dtos.Entities.Contract
     public class UpdateContractDto
     {
         [Required]
-        public Guid Uuid { get; set; }
+        public Guid UUID { get; set; }
         [Required]
         public string ContractNumber { get; set; }
         public string Description { get; set; }

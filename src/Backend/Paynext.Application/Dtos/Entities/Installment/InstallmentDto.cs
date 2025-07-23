@@ -4,7 +4,7 @@ namespace Paynext.Application.Dtos.Entities.Installment
 {
     public class InstallmentDto
     {
-        public Guid Uuid { get; set; }
+        public Guid UUID { get; set; }
         public Guid ContractUuid { get; set; }
         public decimal Value { get; set; }
         public DateTime DueDate { get; set; }
