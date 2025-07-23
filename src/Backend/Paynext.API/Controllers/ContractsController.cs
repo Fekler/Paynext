@@ -30,7 +30,7 @@ namespace Paynext.API.Controllers
         [HttpGet("{guid:guid}")]
         public async Task<IActionResult> Get(Guid guid)
         {
-            var response = await _contractBusiness.GetDto(guid);
+            var response = await _contractBusiness.GetFullInformation(guid);
             return StatusCode((int)response.StatusCode, response.ApiReponse);
         }
 

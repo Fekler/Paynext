@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Paynext.Application.Dtos.Entities;
 using Paynext.Application.Dtos.Entities.Contract;
 using Paynext.Application.Dtos.Entities.Installment;
 using Paynext.Application.Dtos.Entities.User;
@@ -47,6 +48,14 @@ namespace Paynext.Application.Profiles
                 .Map(dest => dest.UserUuid, src => src.UserUuid)
                 .Map(dest => dest.IsActive, src => true)
                 .Map(dest => dest.UUID, src => src.Uuid);
+
+            TypeAdapterConfig<Contract, ContractInformationDto>.NewConfig()
+                .Map(dest => dest.ClientId, src => src.UserUuid)
+                .Map(dest => dest.ClientName, src => src.User.FullName)
+                .Map(dest => dest.ContractId, src => src.UUID)
+                .Map(dest => dest.Installments, src => src.Installments
+                    .Select(i => i.Adapt<InstallmentInformationDto>())
+                    .ToList());
             #endregion
 
             #region Installment
@@ -62,6 +71,14 @@ namespace Paynext.Application.Profiles
                 .Map(dest => dest.DueDate, src => src.DueDate)
                 .Map(dest => dest.ContractUuid, src => src.ContractUuid)
                 .Map(dest => dest.UUID, src => src.Uuid);
+
+            TypeAdapterConfig<Installment, InstallmentInformationDto>.NewConfig()
+                .Map(dest => dest.InstallmentId, src => src.UUID)
+                .Map(dest => dest.Status, src => src.Status.ToString())
+                .Map(dest => dest.Amount, src => src.Value)
+                .Map(dest => dest.Antecipated, src => src.IsAntecipated)
+                .Map(dest => dest.DuaDate, src => src.DueDate);
+
             #endregion
         }
     }
