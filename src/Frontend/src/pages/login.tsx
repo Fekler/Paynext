@@ -16,7 +16,7 @@ const LoginPage: React.FC = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await api.post('auth-login', { email, password });
+      const response = await api.post('api/auth/login', { email, password });
       dispatch(loginSuccess({ token: response.data.token, user: response.data.user }));
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erro ao autenticar');

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using DotNetEnv;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Paynext.Application.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,13 +11,21 @@ namespace Paynext.Application.Authentication
     public class TokenService(IConfiguration configuration) : ITokenService
     {
         private const int DEFAULT_TOKEN_LIFETIME_MINUTES = 120;
-
         private readonly IConfiguration _configuration = configuration;
-        private readonly string _jwtKey = Environment.GetEnvironmentVariable("TOKEN_JWT_SECRET")?? configuration["Jwt:Key"];
-        private readonly string _issuer = Environment.GetEnvironmentVariable("API_URL") ?? configuration["Jwt:Issuer"];
-        private readonly string _audience = Environment.GetEnvironmentVariable("APP_URL") ?? configuration["Jwt:Audience"];
+
+        private string _jwtKey = Environment.GetEnvironmentVariable("TOKEN_JWT_SECRET")?? configuration["Jwt:Key"];
+        private string _issuer = Environment.GetEnvironmentVariable("API_URL") ?? configuration["Jwt:Issuer"];
+        private string _audience = Environment.GetEnvironmentVariable("APP_URL") ?? configuration["Jwt:Audience"];
+
+
+
+
         public async Task<AuthenticationResponse> GenerateJwtToken(UserAuthenticateJWT userAuthenticateJwt)
         {
+            Env.TraversePath().Load();
+            _jwtKey= Environment.GetEnvironmentVariable("TOKEN_JWT_SECRET") ?? _configuration["Jwt:Key"];
+            _issuer= Environment.GetEnvironmentVariable("API_URL") ?? _configuration["Jwt:Issuer"];
+            _audience = Environment.GetEnvironmentVariable("APP_URL") ?? _configuration["Jwt:Audience"];
             AuthenticationResponse authenticationResponse = new();
             var claims = new ClaimsIdentity(
             [
@@ -35,7 +44,7 @@ namespace Paynext.Application.Authentication
             {
                 Issuer = _issuer,
                 Audience = _audience,
-                
+
                 Subject = claims,
                 Expires = expiry,
                 SigningCredentials = creds
