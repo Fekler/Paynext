@@ -62,7 +62,9 @@ namespace Paynext.Application.Business
             try
             {
                 var contract = dto.Adapt<Contract>();
+                contract.RemainingValue = contract.InitialAmount;
                 contract.Validate();
+
                 List<Installment> installments = [];
                 for (int i = 0; i < dto.InstallmentCount; i++)
                 {
@@ -153,7 +155,7 @@ namespace Paynext.Application.Business
                 if (!admin)
                 {
                     var contractSearch = await _repository.GetFullInformationByUuid(contractUuid);
-                    if(contractSearch.UserUuid != userUuid)
+                    if (contractSearch.UserUuid != userUuid)
                     {
                         return new Response<ContractDto>()
                             .Failure(default, message: $"Contrato {contractUuid} Não visivel para seu usuario.", statusCode: HttpStatusCode.Forbidden);

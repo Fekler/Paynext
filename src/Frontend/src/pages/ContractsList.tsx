@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, CircularProgress, Button, IconButton, Tooltip, Snackbar, Alert as MuiAlert } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, CircularProgress, Button, IconButton, Tooltip, Snackbar, Alert as MuiAlert, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemText } from '@mui/material';
 import { Add, Visibility } from '@mui/icons-material';
 import api from '../api';
 import ContractFormModal from './ContractFormModal';
+import { useNavigate } from 'react-router-dom';
 
 interface Contract {
   uuid: string;
@@ -27,6 +28,9 @@ const ContractsList: React.FC = () => {
   const [error, setError] = useState('');
   const [snackbar, setSnackbar] = useState<{open: boolean, message: string, severity: 'success'|'error'}>({open: false, message: '', severity: 'success'});
   const [modalOpen, setModalOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [selectedContract, setSelectedContract] = useState<Contract | null>(null);
+  const navigate = useNavigate();
 
   const fetchContracts = async () => {
     setLoading(true);
@@ -49,7 +53,7 @@ const ContractsList: React.FC = () => {
   };
 
   const handleDetails = (uuid: string) => {
-    setSnackbar({open: true, message: `Detalhes do contrato ${uuid}`, severity: 'info'});
+    navigate(`/contratos/${uuid}`);
   };
 
   const handleModalSubmit = () => {
