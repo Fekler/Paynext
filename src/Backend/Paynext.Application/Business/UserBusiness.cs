@@ -166,7 +166,7 @@ namespace Paynext.Application.Business
                 {
                     return new Response<bool>().Failure(false, message: "Usuário não encontrado.", statusCode: HttpStatusCode.NotFound);
                 }
-                existingUser.Password = BCrypt.Net.BCrypt.HashPassword(updateUserDto.Password); // Hash da senha antes de salvar
+                //existingUser.Password = BCrypt.Net.BCrypt.HashPassword(updateUserDto.Password); // Hash da senha antes de salvar
 
                 updateUserDto.Adapt(existingUser);
                 // Adicionar lógica para não permitir atualização de senha aqui, criar método específico se necessário
