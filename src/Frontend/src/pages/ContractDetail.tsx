@@ -53,7 +53,7 @@ const ContractDetail: React.FC = () => {
   };
 
   return (
-    <Box className="min-h-screen w-screen flex flex-col items-center bg-gray-100 py-8">
+    <Box className="min-h-screen w-screen flex flex-col items-center bg-gray-100 py-8" style={{ color: '#111' }}>
       <Paper className="w-full max-w-3xl p-8 mb-8">
         <Button variant="outlined" onClick={() => navigate(-1)} className="mb-4">Voltar</Button>
         <Typography variant="h5" gutterBottom>Detalhes do Contrato</Typography>

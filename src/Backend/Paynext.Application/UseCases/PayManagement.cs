@@ -85,7 +85,7 @@ namespace Paynext.Application.UseCases
                         continue; // Skip if installment not found
                     }
                     var installmentData = installmentEntity.ApiReponse.Data;
-                    if (!installmentData.IsAntecipated || installmentData.ActionedByUser != null)
+                    if (installmentData.IsAntecipated || installmentData.ActionedByUser != null)
                     {
                         continue; // Skip if not antecipated or already actioned
                     }

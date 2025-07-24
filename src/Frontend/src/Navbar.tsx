@@ -10,9 +10,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { logout } from './authSlice';
 
 const adminTabs = [
-  { label: 'Overview', path: '/overview' },
-  { label: 'Contratos', path: '/contratos' },
   { label: 'Usuários', path: '/usuarios' },
+  //{ label: 'Overview', path: '/overview' },
+  { label: 'Contratos', path: '/contratos' },
   { label: 'Solicitações', path: '/Requests' },
 ];
 
@@ -30,20 +30,20 @@ const Navbar: React.FC = () => {
   if (!user) return null;
 
   const tabs = user.role === 'Admin' ? adminTabs : clientTabs;
-  const currentTab = tabs.findIndex(tab => location.pathname.startsWith(tab.path));
+  const currentTab = tabs.find(tab => location.pathname.startsWith(tab.path))?.path || tabs[0].path;
 
   return (
     <AppBar position="static" color="primary">
       <Toolbar className="flex flex-col md:flex-row md:justify-between md:items-center">
         <Typography variant="h6" className="mb-2 md:mb-0">Paynext</Typography>
         <Tabs
-          value={currentTab === -1 ? 0 : currentTab}
-          onChange={(_, idx) => navigate(tabs[idx].path)}
+          value={currentTab}
+          onChange={(_, value) => navigate(value)}
           textColor="inherit"
           indicatorColor="secondary"
         >
           {tabs.map(tab => (
-            <Tab key={tab.path} label={tab.label} />
+            <Tab key={tab.path} label={tab.label} value={tab.path} />
           ))}
         </Tabs>
         <button

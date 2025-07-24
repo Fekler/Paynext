@@ -42,7 +42,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center bg-gray-100">
+    <div className="w-screen h-screen flex items-center justify-center bg-gray-100" style={{ color: '#111' }}>
       <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-md">
         <Typography variant="h5" className="mb-8 text-center font-bold">Login</Typography>
         <form onSubmit={handleLogin} className="flex flex-col gap-6">

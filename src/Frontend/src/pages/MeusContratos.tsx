@@ -54,7 +54,7 @@ const MeusContratos: React.FC = () => {
   return (
     <div className="min-h-screen w-screen flex flex-col items-center bg-gray-100">
       <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-6xl mt-8 mb-4 gap-4 px-2 md:px-8">
-        <Typography variant="h6">Meus Contratos</Typography>
+        <Typography variant="h6" color='black'>Meus Contratos</Typography>
       </div>
       <TableContainer
         component={Paper}

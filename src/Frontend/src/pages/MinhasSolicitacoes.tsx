@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Paper, List, ListItem, ListItemText, CircularProgress, Box, Pagination, Button } from '@mui/material';
+import { Typography, Paper, List, ListItem, ListItemText, CircularProgress, Box, Pagination } from '@mui/material';
 import { contractsService } from '../services/contractsService';
 
-const Requests: React.FC = () => {
+const MinhasSolicitacoes: React.FC = () => {
   const [solicitacoes, setSolicitacoes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -32,23 +32,23 @@ const Requests: React.FC = () => {
   if (error) return <Typography color="error">{error}</Typography>;
 
   return (
-    <Box className="min-h-screen w-screen flex flex-col items-center bg-gray-100 py-8">
-      <Paper className="w-full max-w-3xl p-8 mb-8">
-        <Typography variant="h5" gutterBottom>Minhas Solicitações de Antecipação</Typography>
+    <Box className="min-h-screen w-screen flex flex-col items-center bg-gray-100 py-8" style={{ color: '#111' }}>
+      <Paper className="w-full max-w-3xl p-8 mb-8 rounded-2xl shadow-lg">
+        <Typography variant="h5" gutterBottom fontWeight={700} color="primary.main">Minhas Solicitações de Antecipação</Typography>
         {solicitacoes.length === 0 ? (
-          <Typography>Nenhuma solicitação encontrada.</Typography>
+          <Typography color="textSecondary">Nenhuma solicitação encontrada.</Typography>
         ) : (
           <List>
             {solicitacoes.map((sol: any, idx: number) => (
               <Box key={sol.contractId + idx} mb={2}>
-                <Typography variant="subtitle1" fontWeight={600}>
+                <Typography variant="subtitle1" fontWeight={600} color="primary.dark">
                   Contrato: {sol.contractNumber}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" mb={1}>
                   Cliente: {sol.clientName}
                 </Typography>
                 {sol.installments.map((inst: any, i: number) => (
-                  <ListItem key={inst.uuid || i} divider className={i % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                  <ListItem key={inst.uuid || i} divider className={i % 2 === 0 ? 'bg-gray-50' : 'bg-white'} sx={{ borderRadius: 2, mb: 1 }}>
                     <ListItemText
                       primary={
                         <span className="flex flex-col md:flex-row md:items-center md:gap-4">
@@ -86,4 +86,4 @@ const Requests: React.FC = () => {
   );
 };
 
-export default Requests; 
+export default MinhasSolicitacoes; 

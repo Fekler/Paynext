@@ -102,7 +102,7 @@ const Requests: React.FC = () => {
   if (error) return <Typography color="error">{error}</Typography>;
 
   return (
-    <Box className="min-h-screen w-screen flex flex-col items-center bg-gray-100 py-8">
+    <Box className="min-h-screen w-screen flex flex-col items-center bg-gray-100 py-8" style={{ color: '#111' }}>
       <Paper className="w-full max-w-6xl p-8 mb-8">
         <Typography variant="h5" gutterBottom>Solicitações de Antecipação</Typography>
         <Grid container spacing={4}>
