@@ -82,6 +82,7 @@ namespace Paynext.Infra.Repositories
                     Status = i.Status,
                     PaymentDate = i.PaymentDate,
                     ContractUuid = i.ContractUuid,
+                    AntecipationStatus = i.AntecipationStatus,
 
                 }).OrderBy(i=> i.DueDate)]
             };

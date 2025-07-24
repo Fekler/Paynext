@@ -11,7 +11,7 @@ namespace Paynext.Application.Dtos.Entities.Installment
         public DateTime? PaymentDate { get; set; }
         public bool IsAntecipated { get; set; } 
         public InstallmentStatus Status { get; set; }
-        public AntecipationStatus? AntecipationStatus { get; set; };
+        public AntecipationStatus? AntecipationStatus { get; set; }
 
     }
 }
