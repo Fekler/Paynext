@@ -250,6 +250,63 @@ namespace Paynext.Application.Business
                     .Failure(default, message: $"Error retrieving contractswith UUID {contractUuid}: {ex.Message}", statusCode: HttpStatusCode.InternalServerError);
             }
         }
+        public async Task<Response<ContractDto>> GetFullInformationByContractNumber(string contractNumber, Guid userUuid, bool admin = false)
+        {
+            try
+            {
+                var contract = await _repository.GetByContractNumber(contractNumber);
+
+                if (!admin)
+                {
+                    if (contract.UserUuid != userUuid)
+                    {
+                        return new Response<ContractDto>()
+                            .Failure(default, message: $"Contrato {contractNumber} Não visivel para seu usuario.", statusCode: HttpStatusCode.Forbidden);
+                    }
+                }
+                var contracdto = new ContractDto()
+                {
+                    UUID = contract.UUID,
+                    ContractNumber = contract.ContractNumber,
+                    UserUuid = contract.UserUuid,
+                    UserName = contract.User.FullName,
+                    IsFinished = contract.IsFinished,
+                    StartDate = contract.StartDate,
+                    EndDate = contract.EndDate,
+                    InitialAmount = contract.InitialAmount,
+                    IsActive = contract.IsActive,
+                    InstallmentsCount = contract.Installments.Count,
+                    RemainingValue = contract.Installments
+                    .Where(i => i.Status !=  Domain.Entities._bases.Enums.InstallmentStatus.Paid)
+                    .Sum(i => i.Value),
+                    //Installments = []
+                    Installments =
+                    [.. contract.Installments.Select(i => new InstallmentDto
+                    {
+                        UUID = i.UUID,
+                        Value = i.Value,
+                        DueDate = i.DueDate,
+                        IsAntecipated = i.IsAntecipated,
+                        Status = i.Status,
+                        PaymentDate = i.PaymentDate,
+                        ContractUuid = i.ContractUuid,
+                        AntecipationStatus = i.AntecipationStatus,
+
+                    }).OrderBy(i=> i.DueDate)]
+                }
+;
+                //var contractDto = contract.Adapt<ContractDto>();
+                return new Response<ContractDto>()
+                    .Success(data: contracdto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error retrieving contracts  with UUID {contractNumber}.");
+                return new Response<ContractDto>()
+                    .Failure(default, message: $"Error retrieving contractswith UUID {contractNumber}: {ex.Message}", statusCode: HttpStatusCode.InternalServerError);
+            }
+        }
 
         public async Task<Response<List<ContractDto>>> GetAllFullInformation()
         {

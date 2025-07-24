@@ -46,7 +46,19 @@ namespace Paynext.API.Controllers
             var response = await _contractBusiness.GetFullInformation(guid, userId, admin: HttpContext.User.IsInRole("Admin"));
             return StatusCode((int)response.StatusCode, response.ApiReponse);
         }
+        [Authorize(Roles = "Admin,Client")]
+        [HttpGet("{contractNumber:string}")]
+        public async Task<IActionResult> GetByContractNumber(string contractNumber)
+        {
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+            {
+                return Unauthorized(Error.UNAUTHORIZED);
+            }
 
+            var response = await _contractBusiness.GetFullInformationByContractNumber(contractNumber, userId, admin: HttpContext.User.IsInRole("Admin"));
+            return StatusCode((int)response.StatusCode, response.ApiReponse);
+        }
 
         [HttpDelete("{guid:guid}")]
         [Authorize(Roles = "Admin")]

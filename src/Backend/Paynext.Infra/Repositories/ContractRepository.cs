@@ -51,43 +51,6 @@ namespace Paynext.Infra.Repositories
                 .Where(c => c.UserUuid == userUuid)
                 .ToListAsync();
         }
-        public async Task<ContractDto> ContractDto(Guid uuid)
-        {
-
-            var contract = await _dbSet
-                .Where(c => c.UUID == uuid)
-                .Include(c => c.Installments.OrderBy(i => i.DueDate))
-                    .ThenInclude(i => i.ActionedByUser)
-                .Include(c => c.User)
-                .FirstOrDefaultAsync();
-            if (contract == null)
-            {
-                return null;
-            }
-            return new ContractDto
-            {
-                UUID = contract.UUID,
-                ContractNumber = contract.ContractNumber,
-                UserUuid = contract.UserUuid,
-                UserName = contract.User.FullName,
-                InstallmentsCount = contract.Installments.Count,
-                RemainingValue = contract.Installments
-                    .Where(i => i.Status !=  Domain.Entities._bases.Enums.InstallmentStatus.Paid)
-                    .Sum(i => i.Value),
-                Installments = [.. contract.Installments.Select(i => new InstallmentDto
-                {
-                    UUID = i.UUID,
-                    Value = i.Value,
-                    DueDate = i.DueDate,
-                    IsAntecipated = i.IsAntecipated,
-                    Status = i.Status,
-                    PaymentDate = i.PaymentDate,
-                    ContractUuid = i.ContractUuid,
-                    AntecipationStatus = i.AntecipationStatus,
-
-                }).OrderBy(i=> i.DueDate)]
-            };
-        }
         public async Task<List<Contract>> ContractDtoByUserUuid(Guid uuid)
         {
 
@@ -97,10 +60,6 @@ namespace Paynext.Infra.Repositories
                     .ThenInclude(i => i.ActionedByUser)
                 .Include(c => c.User)
                 .ToListAsync();
-            if (contracts == null)
-            {
-                return null;
-            }
 
             return contracts;
 
