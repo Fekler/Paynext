@@ -10,6 +10,7 @@ import ClientRequests from './pages/MinhasSolicitacoes';
 import Requests from './pages/Requests';
 import { useSelector } from 'react-redux';
 import type { RootState } from './store';
+import Box from '@mui/material/Box';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode, allowedRoles: string[] }> = ({ children, allowedRoles }) => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -23,18 +24,19 @@ function App() {
   return (
     <Router>
       {user && <Navbar />}
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/usuarios" element={
-          <ProtectedRoute allowedRoles={["Admin"]}>
-            <UsuariosList />
-          </ProtectedRoute>
-        } />
-        <Route path="/contratos" element={
-          <ProtectedRoute allowedRoles={["Admin"]}>
-            <ContractsList />
-          </ProtectedRoute>
-        } />
+      <Box sx={{ pt: { xs: '56px', sm: '64px' } }}>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/usuarios" element={
+            <ProtectedRoute allowedRoles={["Admin"]}>
+              <UsuariosList />
+            </ProtectedRoute>
+          } />
+          <Route path="/contratos" element={
+            <ProtectedRoute allowedRoles={["Admin"]}>
+              <ContractsList />
+            </ProtectedRoute>
+          } />
                 <Route path="/Requests" element={
           <ProtectedRoute allowedRoles={["Admin"]}>
             <Requests />
@@ -57,6 +59,7 @@ function App() {
         } />
         <Route path="*" element={<Navigate to={user ? (user.role === 'Admin' ? '/usuarios' : '/meus-contratos') : '/login'} replace />} />
       </Routes>
+    </Box>
     </Router>
   );
 }

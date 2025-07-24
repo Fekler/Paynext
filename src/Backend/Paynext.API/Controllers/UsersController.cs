@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Paynext.Application.Dtos.Entities.User;
 using Paynext.Application.Interfaces;
+using Paynext.Domain.Errors;
+using System;
+using System.Security.Claims;
 
 namespace Paynext.API.Controllers
 {
@@ -26,18 +29,32 @@ namespace Paynext.API.Controllers
             return StatusCode((int)response.StatusCode, response.ApiReponse);
         }
 
-        [HttpDelete("{id:int}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var response = await _userBusiness.Delete(id);
-            return StatusCode((int)response.StatusCode, response.ApiReponse);
-        }
+        //[HttpDelete("{id:int}")]
+        //[Authorize(Roles = "Admin")]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    var response = await _userBusiness.Delete(id);
+        //    return StatusCode((int)response.StatusCode, response.ApiReponse);
+        //}
 
         [HttpDelete("{guid:guid}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid guid)
         {
+
+            if (!HttpContext.User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+            {
+                return Unauthorized(Error.UNAUTHORIZED);
+            }
+            if( userId == guid)
+            {
+                return BadRequest("You cannot delete your own account.");
+            }
             var response = await _userBusiness.Delete(guid);
             return StatusCode((int)response.StatusCode, response.ApiReponse);
         }
@@ -74,7 +91,19 @@ namespace Paynext.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            if (!HttpContext.User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+            {
+                return Unauthorized(Error.UNAUTHORIZED);
+            }
+            if (userId == updateUserDto.UUID)
+            {
+                return BadRequest("You cannot Update your own account.");
+            }
             var response = await _userBusiness.Update(updateUserDto);
             return StatusCode((int)response.StatusCode, response.ApiReponse);
         }

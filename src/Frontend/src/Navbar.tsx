@@ -33,7 +33,7 @@ const Navbar: React.FC = () => {
   const currentTab = tabs.find(tab => location.pathname.startsWith(tab.path))?.path || tabs[0].path;
 
   return (
-    <AppBar position="static" color="primary">
+    <AppBar position="fixed" color="primary">
       <Toolbar className="flex flex-col md:flex-row md:justify-between md:items-center">
         <Typography variant="h6" className="mb-2 md:mb-0">Paynext</Typography>
         <Tabs
