@@ -98,6 +98,7 @@ const ContractDetail: React.FC = () => {
                       user?.role !== 'Client' ||
                       inst.status !== 0 ||
                       inst.isAntecipated ||
+                      (inst.antecipationStatus != null && inst.antecipationStatus > 0) ||
                       (new Date(inst.dueDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24) <= 30
                     }
                     hidden={user?.role !== 'Client'}

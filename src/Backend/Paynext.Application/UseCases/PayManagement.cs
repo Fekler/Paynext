@@ -49,7 +49,7 @@ namespace Paynext.Application.UseCases
                 return new Response<bool>().Failure(data: default, message: "Installment is not too far to be antecipated.", statusCode: HttpStatusCode.Forbidden);
             }
             var contracts = await _contractBusiness.GetByUser(userUuid);
-            var hasOtherAntecipationRequests = contracts?.ApiReponse?.Data?.Any(c => c.Installments.Any(i => i.IsAntecipated && i.Status == Domain.Entities._bases.Enums.InstallmentStatus.Open));
+            var hasOtherAntecipationRequests = contracts?.ApiReponse?.Data?.Any(c => c.Installments.Any(i => i.AntecipationStatus == AntecipationStatus.Pending && i.Status == InstallmentStatus.Open));
             if (hasOtherAntecipationRequests.HasValue && hasOtherAntecipationRequests.Value)
             {
                 return new Response<bool>().Failure(data: default, message: "User already has an antecipation request for another installment.", statusCode: HttpStatusCode.Forbidden);
