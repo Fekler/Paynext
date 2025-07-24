@@ -154,6 +154,11 @@ namespace Paynext.Application.Business
                         ContractNumber = contract.ContractNumber,
                         UserUuid = contract.UserUuid,
                         UserName = contract.User.FullName,
+                        IsFinished = contract.IsFinished,
+                        StartDate = contract.StartDate,
+                        EndDate = contract.EndDate,
+                        InitialAmount = contract.InitialAmount,
+                        IsActive = contract.IsActive,
                         InstallmentsCount = contract.Installments.Count,
                         RemainingValue = contract.Installments
                         .Where(i => i.Status !=  Domain.Entities._bases.Enums.InstallmentStatus.Paid)
