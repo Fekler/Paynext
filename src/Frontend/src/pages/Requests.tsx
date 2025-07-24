@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Paper, List, ListItem, ListItemText, CircularProgress, Box, Pagination, Checkbox, Button, Snackbar, Grid, IconButton } from '@mui/material';
+import { Typography, Paper, List, ListItem, ListItemText, CircularProgress, Box, Pagination, Button, Snackbar, IconButton } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
-import { ArrowForward, ArrowBack, Close, RadioButtonChecked } from '@mui/icons-material';
+import { ArrowBack, Close, RadioButtonChecked } from '@mui/icons-material';
 import Tooltip from '@mui/material/Tooltip';
 import { contractsService } from '../services/contractsService';
 
@@ -105,8 +105,15 @@ const Requests: React.FC = () => {
     <Box className="min-h-screen w-screen flex flex-col items-center bg-gray-100 py-8" style={{ color: '#111' }}>
       <Paper className="w-full max-w-6xl p-8 mb-8">
         <Typography variant="h5" gutterBottom>Solicitações de Antecipação</Typography>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={4}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            gap: 4,
+            width: '100%',
+          }}
+        >
+          <Box flex={1}>
             <Typography variant="subtitle1" fontWeight={600} mb={2}>Pendentes</Typography>
             <List>
               {pendentes.length === 0 && <Typography color="textSecondary">Nenhuma pendente</Typography>}
@@ -135,8 +142,8 @@ const Requests: React.FC = () => {
                 </ListItem>
               ))}
             </List>
-          </Grid>
-          <Grid item xs={12} md={4}>
+          </Box>
+          <Box flex={1}>
             <Typography variant="subtitle1" fontWeight={600} mb={2}>Aprovados</Typography>
             <List>
               {aprovados.length === 0 && <Typography color="textSecondary">Nenhum aprovado</Typography>}
@@ -158,8 +165,8 @@ const Requests: React.FC = () => {
                 </ListItem>
               ))}
             </List>
-          </Grid>
-          <Grid item xs={12} md={4}>
+          </Box>
+          <Box flex={1}>
             <Typography variant="subtitle1" fontWeight={600} mb={2}>Rejeitados</Typography>
             <List>
               {rejeitados.length === 0 && <Typography color="textSecondary">Nenhum rejeitado</Typography>}
@@ -181,8 +188,8 @@ const Requests: React.FC = () => {
                 </ListItem>
               ))}
             </List>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
         <Box className="flex gap-4 mt-8 justify-center">
           <Button
             variant="contained"

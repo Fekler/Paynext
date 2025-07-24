@@ -1,0 +1,38 @@
+{
+  "ok": true,
+  "message": "Contracts retrieved successfully",
+  "data": [
+    {
+      "uuid": "4e431760-bcaf-4b0f-9fad-65ada3afca91",
+      "contractNumber": "123",
+      "userUuid": "3b71e97b-cfa2-41d5-be77-a967cba1586a",
+      "userName": "Cliente Número 2",
+      "initialAmount": 15000,
+      "remainingValue": 15000.03,
+      "startDate": "2025-08-25T00:00:00Z",
+      "endDate": "2026-04-25T00:00:00Z",
+      "isFinished": false,
+      "isActive": true,
+      "installmentsCount": 9,
+      "user": null,
+      "installments": []
+    },
+    {
+      "uuid": "514fc7e1-5019-41b3-8cfa-6312a8baa789",
+      "contractNumber": "12",
+      "userUuid": "d0c38f08-7509-4098-b1ba-b02a7766f00a",
+      "userName": "Cliente Número 1",
+      "initialAmount": 153000,
+      "remainingValue": 153000,
+      "startDate": "2025-12-05T00:00:00Z",
+      "endDate": "2055-11-05T00:00:00Z",
+      "isFinished": false,
+      "isActive": true,
+      "installmentsCount": 360,
+      "user": null,
+      "installments": []
+    }
+  ],
+  "errorCode": null,
+  "errors": null
+}

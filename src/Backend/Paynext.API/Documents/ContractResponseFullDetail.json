@@ -1,0 +1,112 @@
+{
+  "ok": true,
+  "message": "Contracts retrieved successfully",
+  "data": {
+    "uuid": "4e431760-bcaf-4b0f-9fad-65ada3afca91",
+    "contractNumber": "123",
+    "userUuid": "3b71e97b-cfa2-41d5-be77-a967cba1586a",
+    "userName": "Cliente Número 2",
+    "initialAmount": 15000,
+    "remainingValue": 15000.03,
+    "startDate": "2025-08-25T00:00:00Z",
+    "endDate": "2026-04-25T00:00:00Z",
+    "isFinished": false,
+    "isActive": true,
+    "installmentsCount": 9,
+    "user": null,
+    "installments": [
+      {
+        "uuid": "fa3256d4-fad1-4297-9f7c-6b4b8646e2ac",
+        "contractUuid": "4e431760-bcaf-4b0f-9fad-65ada3afca91",
+        "value": 1666.67,
+        "dueDate": "2025-09-25T00:00:00Z",
+        "paymentDate": null,
+        "isAntecipated": false,
+        "status": 0,
+        "antecipationStatus": null
+      },
+      {
+        "uuid": "de5023df-7876-4e6f-9bf9-b6aeaa1cfa14",
+        "contractUuid": "4e431760-bcaf-4b0f-9fad-65ada3afca91",
+        "value": 1666.67,
+        "dueDate": "2025-10-25T00:00:00Z",
+        "paymentDate": null,
+        "isAntecipated": false,
+        "status": 0,
+        "antecipationStatus": null
+      },
+      {
+        "uuid": "a6bdc7f5-ce88-470b-b5db-430084db13a2",
+        "contractUuid": "4e431760-bcaf-4b0f-9fad-65ada3afca91",
+        "value": 1666.67,
+        "dueDate": "2025-11-25T00:00:00Z",
+        "paymentDate": null,
+        "isAntecipated": false,
+        "status": 0,
+        "antecipationStatus": null
+      },
+      {
+        "uuid": "00b8a0d2-7b71-4865-9a2e-7d643d57d0b8",
+        "contractUuid": "4e431760-bcaf-4b0f-9fad-65ada3afca91",
+        "value": 1666.67,
+        "dueDate": "2025-12-25T00:00:00Z",
+        "paymentDate": null,
+        "isAntecipated": false,
+        "status": 0,
+        "antecipationStatus": null
+      },
+      {
+        "uuid": "0cb64a3d-fd22-4271-b0b4-b399d7efadb4",
+        "contractUuid": "4e431760-bcaf-4b0f-9fad-65ada3afca91",
+        "value": 1666.67,
+        "dueDate": "2026-01-25T00:00:00Z",
+        "paymentDate": null,
+        "isAntecipated": false,
+        "status": 0,
+        "antecipationStatus": null
+      },
+      {
+        "uuid": "44bc1f8a-4cd7-4d5c-9357-ad346259e817",
+        "contractUuid": "4e431760-bcaf-4b0f-9fad-65ada3afca91",
+        "value": 1666.67,
+        "dueDate": "2026-02-25T00:00:00Z",
+        "paymentDate": null,
+        "isAntecipated": false,
+        "status": 0,
+        "antecipationStatus": null
+      },
+      {
+        "uuid": "973c77d4-b43b-427e-b581-a070af813b32",
+        "contractUuid": "4e431760-bcaf-4b0f-9fad-65ada3afca91",
+        "value": 1666.67,
+        "dueDate": "2026-03-25T00:00:00Z",
+        "paymentDate": null,
+        "isAntecipated": false,
+        "status": 0,
+        "antecipationStatus": null
+      },
+      {
+        "uuid": "380d00d1-0dcf-4587-8c1d-885677088003",
+        "contractUuid": "4e431760-bcaf-4b0f-9fad-65ada3afca91",
+        "value": 1666.67,
+        "dueDate": "2026-04-25T00:00:00Z",
+        "paymentDate": null,
+        "isAntecipated": false,
+        "status": 0,
+        "antecipationStatus": null
+      },
+      {
+        "uuid": "250fa647-2a29-4c3e-b638-218a8dcb33c7",
+        "contractUuid": "4e431760-bcaf-4b0f-9fad-65ada3afca91",
+        "value": 1666.67,
+        "dueDate": "2026-05-25T00:00:00Z",
+        "paymentDate": null,
+        "isAntecipated": false,
+        "status": 0,
+        "antecipationStatus": null
+      }
+    ]
+  },
+  "errorCode": null,
+  "errors": null
+}

@@ -60,7 +60,9 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ open, onClose, onSubmit, 
           <TextField label="Telefone" name="phone" value={form.phone} onChange={handleChange} fullWidth />
           <TextField label="Documento" name="document" value={form.document} onChange={handleChange} fullWidth />
           {/*<TextField label="ID do Cliente" name="clientId" value={form.clientId} onChange={handleChange} fullWidth />*/}
-          <TextField label="Senha" name="password" value={form.password} onChange={handleChange} type="password" required={!isEdit} fullWidth />
+          {!isEdit && (
+            <TextField label="Senha" name="password" value={form.password} onChange={handleChange} type="password" required fullWidth />
+          )}
           <TextField select label="Perfil" name="userRole" value={form.userRole} onChange={handleRoleChange} required fullWidth>
             <MenuItem value={1}>Admin</MenuItem>
             <MenuItem value={0}>Cliente</MenuItem>

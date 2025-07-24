@@ -1,11 +1,6 @@
 ﻿using Paynext.Domain.Entities._bases;
 using Paynext.Domain.Errors;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Paynext.Domain.Entities._bases.Enums;
 
 namespace Paynext.Application.Dtos.Entities.User
@@ -28,8 +23,8 @@ namespace Paynext.Application.Dtos.Entities.User
         [MaxLength(Const.PHONE_MAX_LENGTH, ErrorMessage = "O Telefone não pode exceder 20 caracteres.")]
         public string? Phone { get; set; }
 
-        [Required(ErrorMessage = "A Senha é obrigatória.")]
-        public string Password { get; set; }
+        //[Required(ErrorMessage = "A Senha é obrigatória.")]
+        //public string Password { get; set; }
 
         public string Document { get; set; }
 

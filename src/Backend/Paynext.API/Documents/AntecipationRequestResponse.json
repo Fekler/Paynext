@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "message": "Antecipation requests retrieved successfully.",
+  "data": [
+    {
+      "contractId": "514fc7e1-5019-41b3-8cfa-6312a8baa789",
+      "contractNumber": "12",
+      "clientId": "d0c38f08-7509-4098-b1ba-b02a7766f00a",
+      "clientName": "Cliente Número 1",
+      "installments": [
+        {
+          "uuid": "14d6aa5c-d0f8-454a-ac0b-131803ab9716",
+          "contractUuid": "514fc7e1-5019-41b3-8cfa-6312a8baa789",
+          "value": 425,
+          "dueDate": "2026-03-05T00:00:00Z",
+          "paymentDate": null,
+          "isAntecipated": false,
+          "status": 0,
+          "antecipationStatus": 1
+        }
+      ]
+    }
+  ],
+  "errorCode": null,
+  "errors": null
+}

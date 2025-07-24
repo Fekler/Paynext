@@ -87,18 +87,23 @@ const ContractsList: React.FC = () => {
   if (!contracts || contracts.length === 0) {
     return (
       <div className="min-h-screen w-screen flex flex-col items-center justify-center bg-gray-100">
-        <div className="flex flex-col items-center gap-4">
-          <Typography variant="h6" className="mt-20 text-center">Nenhum contrato ativo encontrado.</Typography>
-          <Button variant="contained" color="primary" startIcon={<Add />} onClick={handleAdd}>
-            Adicionar Contrato
+        <div className="w-full max-w-6xl flex flex-col md:flex-row gap-4 mb-4 px-2 md:px-8">
+          <TextField
+            label="Buscar por Número do Contrato"
+            variant="outlined"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') handleSearch(); }}
+            fullWidth
+          />
+          <Button variant="contained" color="primary" startIcon={<SearchIcon />} onClick={handleSearch} disabled={searching}>
+            Buscar
+          </Button>
+          <Button variant="outlined" color="secondary" onClick={() => { setSearch(''); fetchContracts(); }}>
+            Voltar
           </Button>
         </div>
-        <ContractFormModal open={modalOpen} onClose={() => setModalOpen(false)} onSubmit={handleModalSubmit} />
-        <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar({...snackbar, open: false})}>
-          <MuiAlert onClose={() => setSnackbar({...snackbar, open: false})} severity={snackbar.severity} sx={{ width: '100%' }}>
-            {snackbar.message}
-          </MuiAlert>
-        </Snackbar>
+        <Typography variant="h6" color='black' className="mt-20 text-center">Nenhum contrato encontrado.</Typography>
       </div>
     );
   }

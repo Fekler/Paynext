@@ -23,6 +23,7 @@ namespace Paynext.Application.Profiles
             TypeAdapterConfig<UpdateUserDto, User>.NewConfig()
                 .Ignore(dest => dest.Id)
                 .Ignore(dest => dest.CreateAt)
+                .Ignore(dest => dest.Password)
                 .Map(dest => dest.UpdateAt, src => DateTime.Now.ToUniversalTime());
 
             #endregion
