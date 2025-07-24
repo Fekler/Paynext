@@ -49,7 +49,7 @@ namespace Paynext.Application.Business
                 user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password); // Hash da senha antes de salvar
                 await _userRepository.Add(user);
                 _logger.LogInformation($"Usuário criado com UUID: {user.UUID}");
-                return new Response<Guid>().Sucess(user.UUID, statusCode: HttpStatusCode.Created);
+                return new Response<Guid>().Success(user.UUID, statusCode: HttpStatusCode.Created);
             }
             catch(DomainExceptionValidation ex)
             {
@@ -91,7 +91,7 @@ namespace Paynext.Application.Business
                 if (result)
                 {
                     _logger.LogInformation($"Usuário com UUID: {guid} deletado com sucesso.");
-                    return new Response<bool>().Sucess(result, statusCode: HttpStatusCode.OK);
+                    return new Response<bool>().Success(result, statusCode: HttpStatusCode.OK);
                 }
                 else
                 {
@@ -130,7 +130,7 @@ namespace Paynext.Application.Business
                     return new Response<UserDto>().Failure(default, message: "Usuário não encontrado.", statusCode: HttpStatusCode.NotFound);
                 }
                 var userDto = user.Adapt<UserDto>();
-                return new Response<UserDto>().Sucess(userDto, statusCode: HttpStatusCode.OK);
+                return new Response<UserDto>().Success(userDto, statusCode: HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -148,7 +148,7 @@ namespace Paynext.Application.Business
                 {
                     return new Response<User>().Failure(default, message: "Usuário não encontrado.", statusCode: HttpStatusCode.NotFound);
                 }
-                return new Response<User>().Sucess(user, statusCode: HttpStatusCode.OK);
+                return new Response<User>().Success(user, statusCode: HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -174,7 +174,7 @@ namespace Paynext.Application.Business
                 if (result)
                 {
                     _logger.LogInformation($"Usuário com UUID: {updateUserDto.UUID} atualizado com sucesso.");
-                    return new Response<bool>().Sucess(result, statusCode: HttpStatusCode.OK);
+                    return new Response<bool>().Success(result, statusCode: HttpStatusCode.OK);
                 }
                 else
                 {
@@ -198,7 +198,7 @@ namespace Paynext.Application.Business
                 {
                     return new Response<User>().Failure(default, message: "Usuário não encontrado com este e-mail.", statusCode: HttpStatusCode.NotFound);
                 }
-                return new Response<User>().Sucess(user, message: Const.MESSAGE_USER_FOUND, statusCode: HttpStatusCode.OK);
+                return new Response<User>().Success(user, message: Const.MESSAGE_USER_FOUND, statusCode: HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -230,7 +230,7 @@ namespace Paynext.Application.Business
                 if (updateResult)
                 {
                     _logger.LogInformation($"Senha do usuário com UUID: {changePasswordDto.UserUuid} alterada com sucesso.");
-                    return new Response<bool>().Sucess(true, message: "Senha alterada com sucesso.", statusCode: HttpStatusCode.OK);
+                    return new Response<bool>().Success(true, message: "Senha alterada com sucesso.", statusCode: HttpStatusCode.OK);
                 }
                 else
                 {
@@ -250,7 +250,7 @@ namespace Paynext.Application.Business
             {
                 var users = await _userRepository.GetAll();
                 var userDtos = users.Adapt<IEnumerable<UserDto>>();
-                return new Response<IEnumerable<UserDto>>().Sucess(userDtos, statusCode: HttpStatusCode.OK);
+                return new Response<IEnumerable<UserDto>>().Success(userDtos, statusCode: HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -268,7 +268,7 @@ namespace Paynext.Application.Business
 
 
                 var userDtos = users.Adapt<IEnumerable<UserDto>>();
-                return new Response<IEnumerable<UserDto>>().Sucess(userDtos, statusCode: HttpStatusCode.OK);
+                return new Response<IEnumerable<UserDto>>().Success(userDtos, statusCode: HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

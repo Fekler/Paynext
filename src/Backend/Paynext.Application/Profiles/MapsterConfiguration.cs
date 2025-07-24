@@ -42,6 +42,7 @@ namespace Paynext.Application.Profiles
 
             TypeAdapterConfig<UpdateContractDto, Contract>.NewConfig()
                 .Ignore(dest => dest.Id)
+                .Ignore(dest => dest.CreateAt)
                 .Map(dest => dest.ContractNumber, src => src.ContractNumber.Trim())
                 .Map(dest => dest.Description, src => src.Description.Trim())
                 .Map(dest => dest.InitialAmount, src => src.Amount)
@@ -55,6 +56,7 @@ namespace Paynext.Application.Profiles
             TypeAdapterConfig<Contract, ContractInformationDto>.NewConfig()
                 .Map(dest => dest.ClientId, src => src.UserUuid)
                 .Map(dest => dest.ClientName, src => src.User.FullName)
+                .Map(dest => dest.ContractNumber, src => src.ContractNumber)
                 .Map(dest => dest.ContractId, src => src.UUID)
                 .Map(dest => dest.Installments, src => src.Installments
                     .Select(i => i.Adapt<InstallmentInformationDto>())
@@ -71,18 +73,21 @@ namespace Paynext.Application.Profiles
                 .Map(dest => dest.UUID, src => Guid.NewGuid());
             TypeAdapterConfig<UpdateInstallmentDto, Installment>.NewConfig()
                 .Ignore(dest => dest.Id)
-                //.Map(dest => dest.Amount, src => src.Amount)
+                .Ignore(dest => dest.CreateAt)
+                .Map(dest => dest.Status, src => src.Status)
                 .Map(dest => dest.DueDate, src => src.DueDate.ToUniversalTime())
                 .Map(dest => dest.ContractUuid, src => src.ContractUuid)
                 .Map(dest => dest.UpdateAt, src => DateTime.UtcNow)
-                .Map(dest => dest.UUID, src => src.UUID);
+                .Map(dest => dest.IsAntecipated, src => src.IsAntecipated)
+                .Map(dest => dest.ActionedByUserUuiD, src => src.ActionedByUser)
+                .Map(dest => dest.UUID, src => src.UUID).TwoWays();
 
             TypeAdapterConfig<Installment, InstallmentInformationDto>.NewConfig()
                 .Map(dest => dest.InstallmentId, src => src.UUID)
                 .Map(dest => dest.Status, src => src.Status.ToString())
                 .Map(dest => dest.Amount, src => src.Value)
                 .Map(dest => dest.Antecipated, src => src.IsAntecipated)
-                .Map(dest => dest.DuaDate, src => src.DueDate);
+                .Map(dest => dest.DueDate, src => src.DueDate);
 
             #endregion
         }

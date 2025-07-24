@@ -1,16 +1,14 @@
-﻿using Paynext.Application.Dtos.Entities.Installment;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Paynext.Application.Dtos.Entities;
+using Paynext.Application.Dtos.Entities.Installment;
+using SharedKernel;
 
 namespace Paynext.Application.Interfaces
 {
     public interface IPayManagement
     {
-        Task AntecipationInstallmentRequest(Guid installmentUuid);
-        Task ListAllAntecipationRequests();
+        Task<Response<bool>> AntecipationInstallmentRequest(Guid installmentUuid, Guid userUuid);
+        Task<Response<List<ContractInformationDto>>> ListAllAntecipationRequests(int pageNumber, int pageSize);
         Task ActioneAntecipationRequests(List<ActioneInstallment> installments, Guid userUuid);
+        Task<Response<ContractInformationDto>> GetInstallment(Guid guid);
     }
 }

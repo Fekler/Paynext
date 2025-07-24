@@ -20,5 +20,15 @@ namespace Paynext.Infra.Repositories
             return await _dbSet.Where(i => i.ContractUuid == contractUuid && i.Status == status)
                 .ToListAsync();
         }
+        public async Task<List<Installment>> GetAllAntecipateToActione(int pageNumber, int pageSize)
+        {
+            return await _dbSet
+                .Where(i => i.IsAntecipated && i.Status == InstallmentStatus.Open && i.ActionedByUser == null)
+                .Include(i => i.Contract)
+                    .ThenInclude(i => i.User)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
     }
 }

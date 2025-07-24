@@ -12,6 +12,7 @@ namespace Paynext.Application.Dtos.Entities.Installment
         public DateTime DueDate { get; set; }
         public DateTime? PaymentDate { get; set; }
         public bool IsAntecipated { get; set; } = false;
+        public Guid? ActionedByUser { get; set; } = null;
         public InstallmentStatus Status { get; set; } = InstallmentStatus.Open;
     }
 }

@@ -28,7 +28,7 @@ namespace Paynext.Application.UseCases
                 StatusCode = HttpStatusCode.Unauthorized,
                 ApiReponse = new ApiResponse<AuthenticationResponse>
                 {
-                    Success = false,
+                    OK = false,
                     Data = null,
                     ErrorCode = (int)HttpStatusCode.Unauthorized,
                     Message = Error.INVALID_EMAIL_OR_PASSWORD,
@@ -49,7 +49,7 @@ namespace Paynext.Application.UseCases
                 }
 
                 var authenticationResult = await AuthenticateUser(userResult.ApiReponse.Data);
-                if (!authenticationResult.Success || authenticationResult.Data is null)
+                if (!authenticationResult.OK || authenticationResult.Data is null)
                 {
                     response.ApiReponse = authenticationResult;
                     return response;
@@ -65,7 +65,7 @@ namespace Paynext.Application.UseCases
             {
                 _logger.LogError(ex, "Error during login.");
                 response.StatusCode = HttpStatusCode.InternalServerError;
-                response.ApiReponse.Success = false;
+                response.ApiReponse.OK = false;
                 response.ApiReponse.ErrorCode = (int)HttpStatusCode.InternalServerError;
                 response.ApiReponse.Message = Error.UNEXPECTED_ERROR + " during login.";
             }
@@ -78,7 +78,7 @@ namespace Paynext.Application.UseCases
         {
             ApiResponse<AuthenticationResponse> response = new()
             {
-                Success = true,
+                OK = true,
                 Data = new AuthenticationResponse(),
                 ErrorCode = 0,
                 Message = Const.MESSAGE_LOGIN_SUCCESS,

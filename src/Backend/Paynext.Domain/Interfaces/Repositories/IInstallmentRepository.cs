@@ -8,5 +8,6 @@ namespace Paynext.Domain.Interfaces.Repositories
     {
         Task<IEnumerable<Installment>> GetAllByContractId(Guid contractUuid);
         Task<IEnumerable<Installment>> GetAllByContractIdAndStatus(Guid contractUuid, Enums.InstallmentStatus status);
+        Task<List<Installment>> GetAllAntecipateToActione(int pageNumber, int pageSize);
     }
 }

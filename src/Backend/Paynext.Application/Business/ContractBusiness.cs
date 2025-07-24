@@ -46,7 +46,7 @@ namespace Paynext.Application.Business
                 }
                 contract.Installments = installments;
                 await _repository.Add(contract);
-                return new Response<Guid>().Sucess(data: contract.UUID, message: "Contract created successfully", statusCode: HttpStatusCode.Created);
+                return new Response<Guid>().Success(data: contract.UUID, message: "Contract created successfully", statusCode: HttpStatusCode.Created);
 
             }
             catch (Exception ex)
@@ -104,7 +104,7 @@ namespace Paynext.Application.Business
                 var deleted = await _repository.Delete(guid);
 
                 return new Response<bool>()
-                    .Sucess(data: deleted, message: "Contract deleted successfully", statusCode: HttpStatusCode.OK);
+                    .Success(data: deleted, message: "Contract deleted successfully", statusCode: HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -121,7 +121,7 @@ namespace Paynext.Application.Business
                 var contract = await _repository.Get(id);
 
                 return new Response<ContractDto>()
-                    .Sucess(data: contract.Adapt<ContractDto>(), message: "Contract retrieved successfully", statusCode: HttpStatusCode.OK);
+                    .Success(data: contract.Adapt<ContractDto>(), message: "Contract retrieved successfully", statusCode: HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -138,7 +138,7 @@ namespace Paynext.Application.Business
                 var contracts = await _repository.GetByUserUuid(userUuid);
                 var contractsDto = contracts.Adapt<List<ContractDto>>();
                 return new Response<List<ContractDto>>()
-                    .Sucess(data: contractsDto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
+                    .Success(data: contractsDto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
 
             }
             catch (Exception ex)
@@ -164,7 +164,7 @@ namespace Paynext.Application.Business
                 var contract = await _repository.GetFullInformationByUuid(contractUuid);
                 var contractDto = contract.Adapt<ContractDto>();
                 return new Response<ContractDto>()
-                    .Sucess(data: contractDto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
+                    .Success(data: contractDto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
 
             }
             catch (Exception ex)
@@ -190,7 +190,7 @@ namespace Paynext.Application.Business
                 var contracts = await _repository.GetAllFullInformation();
                 var contracstDto = contracts.Adapt<List<ContractDto>>();
                 return new Response<List<ContractDto>>()
-                    .Sucess(data: contracstDto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
+                    .Success(data: contracstDto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
 
             }
             catch (Exception ex)
@@ -215,7 +215,7 @@ namespace Paynext.Application.Business
                 var contracts = await _repository.GetAllActiveContracts();
                 var contracstDto = contracts.Adapt<List<ContractDto>>();
                 return new Response<List<ContractDto>>()
-                    .Sucess(data: contracstDto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
+                    .Success(data: contracstDto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
 
             }
             catch (Exception ex)
@@ -237,7 +237,7 @@ namespace Paynext.Application.Business
                         .Failure(default, message: $"Contract with UUID {guid} not found.", statusCode: HttpStatusCode.NotFound);
                 }
                 return new Response<ContractDto>()
-                    .Sucess(data: contract.Adapt<ContractDto>(), message: "Contract retrieved successfully", statusCode: HttpStatusCode.OK);
+                    .Success(data: contract.Adapt<ContractDto>(), message: "Contract retrieved successfully", statusCode: HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -258,7 +258,7 @@ namespace Paynext.Application.Business
                         .Failure(default, message: $"Contract with UUID {guid} not found.", statusCode: HttpStatusCode.NotFound);
                 }
                 return new Response<Contract>()
-                    .Sucess(data: contract, message: "Contract retrieved successfully", statusCode: HttpStatusCode.OK);
+                    .Success(data: contract, message: "Contract retrieved successfully", statusCode: HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -285,7 +285,7 @@ namespace Paynext.Application.Business
                 {
                     _logger.LogInformation($"Contract with UUID {dto.UUID} updated successfully.");
                     return new Response<bool>()
-                        .Sucess(data: true, message: "Contract updated successfully", statusCode: HttpStatusCode.OK);
+                        .Success(data: true, message: "Contract updated successfully", statusCode: HttpStatusCode.OK);
                 }
                 else
                 {

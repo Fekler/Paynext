@@ -27,7 +27,7 @@ namespace Paynext.Application.Business
                 installment.Validate();
                 var result = await _repository.Add(installment);
                 _logger.LogInformation($"Installment created with ID: {result}");
-                return new Response<Guid>().Sucess(data: installment.UUID, message: "Installment created successfully", statusCode: System.Net.HttpStatusCode.Created);
+                return new Response<Guid>().Success(data: installment.UUID, message: "Installment created successfully", statusCode: System.Net.HttpStatusCode.Created);
             }
             catch (Exception ex)
             {
@@ -47,7 +47,7 @@ namespace Paynext.Application.Business
                 }
                 var deleted = await _repository.Delete(id);
                 return new Response<bool>()
-                    .Sucess(data: deleted, message: "Installment deleted successfully", statusCode: System.Net.HttpStatusCode.OK);
+                    .Success(data: deleted, message: "Installment deleted successfully", statusCode: System.Net.HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -67,7 +67,7 @@ namespace Paynext.Application.Business
                 }
                 var deleted = await _repository.Delete(guid);
                 return new Response<bool>()
-                    .Sucess(data: deleted, message: "Installment deleted successfully", statusCode: System.Net.HttpStatusCode.OK);
+                    .Success(data: deleted, message: "Installment deleted successfully", statusCode: System.Net.HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -86,7 +86,7 @@ namespace Paynext.Application.Business
                     return new Response<InstallmentDto>().Failure(null, message: "Installment not found", statusCode: System.Net.HttpStatusCode.NotFound);
                 }
                 var installmentDto = installment.Adapt<InstallmentDto>();
-                return new Response<InstallmentDto>().Sucess(data: installmentDto, message: "Installment retrieved successfully", statusCode: System.Net.HttpStatusCode.OK);
+                return new Response<InstallmentDto>().Success(data: installmentDto, message: "Installment retrieved successfully", statusCode: System.Net.HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -105,7 +105,7 @@ namespace Paynext.Application.Business
                     return new Response<List<InstallmentDto>>().Failure(null, message: "No installments found for the specified contract", statusCode: System.Net.HttpStatusCode.NotFound);
                 }
                 var installmentDtos = installments.Adapt<List<InstallmentDto>>();
-                return new Response<List<InstallmentDto>>().Sucess(data: installmentDtos, message: "Installments retrieved successfully", statusCode: System.Net.HttpStatusCode.OK);
+                return new Response<List<InstallmentDto>>().Success(data: installmentDtos, message: "Installments retrieved successfully", statusCode: System.Net.HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -124,7 +124,7 @@ namespace Paynext.Application.Business
                     return new Response<List<InstallmentDto>>().Failure(null, message: "No installments found for the specified contract and status", statusCode: System.Net.HttpStatusCode.NotFound);
                 }
                 var installmentDtos = installments.Adapt<List<InstallmentDto>>();
-                return new Response<List<InstallmentDto>>().Sucess(data: installmentDtos, message: "Installments retrieved successfully", statusCode: System.Net.HttpStatusCode.OK);
+                return new Response<List<InstallmentDto>>().Success(data: installmentDtos, message: "Installments retrieved successfully", statusCode: System.Net.HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -143,7 +143,7 @@ namespace Paynext.Application.Business
                     return new Response<InstallmentDto>().Failure(null, message: "Installment not found", statusCode: System.Net.HttpStatusCode.NotFound);
                 }
                 var installmentDto = installment.Adapt<InstallmentDto>();
-                return new Response<InstallmentDto>().Sucess(data: installmentDto, message: "Installment retrieved successfully", statusCode: System.Net.HttpStatusCode.OK);
+                return new Response<InstallmentDto>().Success(data: installmentDto, message: "Installment retrieved successfully", statusCode: System.Net.HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -162,7 +162,7 @@ namespace Paynext.Application.Business
                 {
                     return new Response<Installment>().Failure(null, message: "Installment not found", statusCode: System.Net.HttpStatusCode.NotFound);
                 }
-                return new Response<Installment>().Sucess(data: installment, message: "Installment retrieved successfully", statusCode: System.Net.HttpStatusCode.OK);
+                return new Response<Installment>().Success(data: installment, message: "Installment retrieved successfully", statusCode: System.Net.HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -183,12 +183,29 @@ namespace Paynext.Application.Business
                 installment = dto.Adapt(installment);
                 installment.Validate();
                 var updated = await _repository.Update(installment);
-                return new Response<bool>().Sucess(data: updated, message: "Installment updated successfully", statusCode: System.Net.HttpStatusCode.OK);
+                return new Response<bool>().Success(data: updated, message: "Installment updated successfully", statusCode: System.Net.HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error updating installment with UUID {dto.UUID}.");
                 return new Response<bool>().Failure(false, message: $"Error updating installment: {ex.Message}", statusCode: System.Net.HttpStatusCode.InternalServerError);
+            }
+        }
+        public async Task<Response<List<Installment>>> GetAllAntecipateToActione(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var installments = await _repository.GetAllAntecipateToActione(pageNumber, pageSize);
+                if (installments == null || installments.Count==0)
+                {
+                    return new Response<List<Installment>>().Failure(null, message: "No antecipated installments found", statusCode: System.Net.HttpStatusCode.NotFound);
+                }
+                return new Response<List<Installment>>().Success(data: installments, message: "Antecipated installments retrieved successfully", statusCode: System.Net.HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving antecipated installments.");
+                return new Response<List<Installment>>().Failure(null, message: $"Error retrieving antecipated installments: {ex.Message}", statusCode: System.Net.HttpStatusCode.InternalServerError);
             }
         }
     }
