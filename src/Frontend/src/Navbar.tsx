@@ -24,7 +24,6 @@ const Navbar: React.FC = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const location = useLocation();
   const navigate = useNavigate();
-  const hideNavbar = location.pathname === '/login';
 
   if (!user) return null;
 
