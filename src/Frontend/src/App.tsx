@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 import UsuariosList from './pages/UsuariosList';
 import ContractsList from './pages/ContractsList';
 import ContractDetail from './pages/ContractDetail';
+import MeusContratos from './pages/MeusContratos';
 import { useSelector } from 'react-redux';
 import type { RootState } from './store';
 
@@ -33,11 +34,16 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/contratos/:uuid" element={
-          <ProtectedRoute allowedRoles={["Admin"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Client"]}>
             <ContractDetail />
           </ProtectedRoute>
         } />
-        <Route path="*" element={<Navigate to={user ? (user.role === 'Admin' ? '/usuarios' : '/meu-contrato') : '/login'} replace />} />
+        <Route path="/meus-contratos" element={
+          <ProtectedRoute allowedRoles={["Client"]}>
+            <MeusContratos />
+          </ProtectedRoute>
+        } />
+        <Route path="*" element={<Navigate to={user ? (user.role === 'Admin' ? '/usuarios' : '/meus-contratos') : '/login'} replace />} />
       </Routes>
     </Router>
   );

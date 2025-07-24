@@ -23,7 +23,7 @@ namespace Paynext.Infra.Repositories
         public async Task<List<Installment>> GetAllAntecipateToActione(int pageNumber, int pageSize)
         {
             return await _dbSet
-                .Where(i => i.IsAntecipated && i.Status == InstallmentStatus.Open && i.ActionedByUser == null)
+                .Where(i => !i.IsAntecipated && i.Status == InstallmentStatus.Open && i.ActionedByUser == null && i.AntecipationStatus == AntecipationStatus.Pending)
                 .Include(i => i.Contract)
                     .ThenInclude(i => i.User)
                 .Skip((pageNumber - 1) * pageSize)

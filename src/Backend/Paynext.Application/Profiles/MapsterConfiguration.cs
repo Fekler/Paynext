@@ -74,6 +74,7 @@ namespace Paynext.Application.Profiles
             TypeAdapterConfig<UpdateInstallmentDto, Installment>.NewConfig()
                 .Ignore(dest => dest.Id)
                 .Ignore(dest => dest.CreateAt)
+                .Ignore(dest => dest.Value)
                 .Map(dest => dest.Status, src => src.Status)
                 .Map(dest => dest.DueDate, src => src.DueDate.ToUniversalTime())
                 .Map(dest => dest.ContractUuid, src => src.ContractUuid)

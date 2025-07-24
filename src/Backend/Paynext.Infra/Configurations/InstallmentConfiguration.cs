@@ -32,6 +32,10 @@ namespace Paynext.Infra.Configurations
                 .IsRequired()
                 .HasConversion<string>();
 
+            builder.Property(i => i.AntecipationStatus)
+                .IsRequired(false)
+                .HasConversion<string>();
+
             builder.Property(i => i.IsAntecipated)
                 .IsRequired()
                 .HasDefaultValue(false);

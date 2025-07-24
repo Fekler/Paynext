@@ -13,27 +13,27 @@ namespace Paynext.API.Controllers
     {
         private readonly IPayManagement _payManagement = payManagement;
 
-        [HttpGet]
-        public IActionResult Get()
-        {
-            // Check if the user is authenticated
-            if (!HttpContext.User.Identity.IsAuthenticated)
-            {
-                return Unauthorized();
-            }
-            // Check if the user has the required role
-            if (!HttpContext.User.IsInRole("Admin"))
-            {
-                return Forbid();
-            }
-            // Extract user ID from claims
-            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
-            {
-                return Unauthorized(Error.UNAUTHORIZED);
-            }
-            return Ok();
-        }
+        //[HttpGet]
+        //public IActionResult Get()
+        //{
+        //    // Check if the user is authenticated
+        //    if (!HttpContext.User.Identity.IsAuthenticated)
+        //    {
+        //        return Unauthorized();
+        //    }
+        //    // Check if the user has the required role
+        //    if (!HttpContext.User.IsInRole("Admin"))
+        //    {
+        //        return Forbid();
+        //    }
+        //    // Extract user ID from claims
+        //    var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+        //    if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+        //    {
+        //        return Unauthorized(Error.UNAUTHORIZED);
+        //    }
+        //    return Ok();
+        //}
         [HttpPost, Authorize]
         public async Task<IActionResult> RequestAntecipation([FromBody] Guid request)
         {
@@ -58,7 +58,6 @@ namespace Paynext.API.Controllers
             return StatusCode((int)response.StatusCode, response.ApiReponse);
         }
         [HttpGet]
-        [Route("antecipation-requests")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllAntecipationRequest(int pagerNumber, int pageSize)
         {

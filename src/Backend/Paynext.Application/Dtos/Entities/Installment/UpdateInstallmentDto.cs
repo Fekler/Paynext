@@ -14,6 +14,7 @@ namespace Paynext.Application.Dtos.Entities.Installment
         public bool IsAntecipated { get; set; } = false;
         public Guid? ActionedByUser { get; set; } = null;
         public InstallmentStatus Status { get; set; } = InstallmentStatus.Open;
+        public AntecipationStatus? AntecipationStatus { get; set; } = null;
     }
 }
 

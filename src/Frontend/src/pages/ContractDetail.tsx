@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Typography, Paper, List, ListItem, ListItemText, Button, CircularProgress, Box, Pagination } from '@mui/material';
 import { contractsService } from '../services/contractsService';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../store';
 
 const ContractDetail: React.FC = () => {
   const { uuid } = useParams<{ uuid: string }>();
@@ -11,6 +15,8 @@ const ContractDetail: React.FC = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const itemsPerPage = 30;
+  const [snackbar, setSnackbar] = useState<{open: boolean, message: string, severity: 'success'|'error'}>({open: false, message: '', severity: 'success'});
+  const user = useSelector((state: RootState) => state.auth.user);
 
   useEffect(() => {
     const fetchContract = async () => {
@@ -34,6 +40,15 @@ const ContractDetail: React.FC = () => {
 
   const paginatedInstallments = contract?.installments?.slice((page - 1) * itemsPerPage, page * itemsPerPage) || [];
   const pageCount = contract?.installments ? Math.ceil(contract.installments.length / itemsPerPage) : 1;
+
+  const handleRequestAdvance = async (installmentId: string) => {
+    try {
+      await contractsService.advancedRequest(installmentId);
+      setSnackbar({open: true, message: 'Solicitação enviada com sucesso!', severity: 'success'});
+    } catch (err: any) {
+      setSnackbar({open: true, message: 'Erro ao solicitar antecipação.', severity: 'error'});
+    }
+  };
 
   return (
     <Box className="min-h-screen w-screen flex flex-col items-center bg-gray-100 py-8">
@@ -73,6 +88,22 @@ const ContractDetail: React.FC = () => {
                       </span>
                     }
                   />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    style={{ marginLeft: 16 }}
+                    onClick={() => handleRequestAdvance(inst.uuid)}
+                    disabled={
+                      user?.role !== 'Client' ||
+                      inst.status !== 0 ||
+                      inst.isAntecipated ||
+                      (new Date(inst.dueDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24) <= 30
+                    }
+                    hidden={user?.role !== 'Client'}
+                  >
+                    Solicitar Antecipação
+                  </Button>
                 </ListItem>
               ))}
             </List>
@@ -86,6 +117,11 @@ const ContractDetail: React.FC = () => {
           <Typography>Nenhuma parcela encontrada.</Typography>
         )}
       </Paper>
+      <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar({...snackbar, open: false})}>
+        <MuiAlert onClose={() => setSnackbar({...snackbar, open: false})} severity={snackbar.severity} sx={{ width: '100%' }}>
+          {snackbar.message}
+        </MuiAlert>
+      </Snackbar>
     </Box>
   );
 };

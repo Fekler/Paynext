@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import api from '../api';
 import { loginSuccess } from '../authSlice';
 import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 
 interface JwtPayload {
   role: string;
@@ -12,6 +13,7 @@ interface JwtPayload {
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,7 +29,11 @@ const LoginPage: React.FC = () => {
       const decoded = jwtDecode<JwtPayload>(token);
       const role = decoded.role;
       dispatch(loginSuccess({ token, user: { email, role } }));
-      // Aqui futuramente podemos redirecionar baseado no perfil
+      if (role === 'Client') {
+        navigate('/meus-contratos', { replace: true });
+      } else {
+        navigate('/usuarios', { replace: true });
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erro ao autenticar');
     } finally {

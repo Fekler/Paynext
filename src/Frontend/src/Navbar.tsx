@@ -4,9 +4,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from './store';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { logout } from './authSlice';
 
 const adminTabs = [
   { label: 'Overview', path: '/overview' },
@@ -16,14 +17,15 @@ const adminTabs = [
 ];
 
 const clientTabs = [
-  { label: 'Meu Contrato', path: '/meu-contrato' },
-  { label: 'Meus Parcelamentos', path: '/meus-parcelamentos' },
+  { label: 'Meus Contratos', path: '/meus-contratos' },
+  { label: 'Minhas Solicitações', path: '/meus-parcelamentos' },
 ];
 
 const Navbar: React.FC = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   if (!user) return null;
 
@@ -44,6 +46,15 @@ const Navbar: React.FC = () => {
             <Tab key={tab.path} label={tab.label} />
           ))}
         </Tabs>
+        <button
+          onClick={() => {
+            dispatch(logout());
+            navigate('/login');
+          }}
+          style={{ marginLeft: 16, background: 'white', color: '#1976d2', border: 'none', borderRadius: 4, padding: '6px 16px', fontWeight: 600, cursor: 'pointer' }}
+        >
+          Logout
+        </button>
       </Toolbar>
     </AppBar>
   );

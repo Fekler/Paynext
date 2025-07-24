@@ -12,6 +12,7 @@ namespace Paynext.Domain.Entities
         public DateTime? PaymentDate { get; set; }
         public InstallmentStatus Status { get; set; } = InstallmentStatus.Open;
         public Contract Contract { get; set; }
+        public AntecipationStatus? AntecipationStatus { get; set; }
         public bool IsAntecipated { get; set; } = false;
 
         public Guid? ActionedByUserUuiD { get; set; }

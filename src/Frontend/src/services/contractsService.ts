@@ -21,4 +21,10 @@ export const contractsService = {
     const response = await api.delete(`/api/v1/Contracts/${uuid}`);
     return response.data;
   },
+  advancedRequest: async (installmentId: string) => {
+    const response = await api.post('/api/advanced-request', JSON.stringify(installmentId), {
+      headers: { 'Content-Type': 'application/json' }
+    });
+    return response.data;
+  },
 }; 

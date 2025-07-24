@@ -4,6 +4,7 @@ using Paynext.Application.Dtos.Entities.Installment;
 using Paynext.Application.Interfaces;
 using SharedKernel;
 using System.Net;
+using static Paynext.Domain.Entities._bases.Enums;
 
 namespace Paynext.Application.UseCases
 {
@@ -54,8 +55,15 @@ namespace Paynext.Application.UseCases
                 return new Response<bool>().Failure(data: default, message: "User already has an antecipation request for another installment.", statusCode: HttpStatusCode.Forbidden);
             }
             var installmentToUpdate = installment.ApiReponse.Data;
-            installmentToUpdate.IsAntecipated = true;
-            var updateResponse = await _installmentBusiness.Update(installmentToUpdate.Value.Adapt<UpdateInstallmentDto>());
+            UpdateInstallmentDto updateInstallmentDto = new()
+            {
+                UUID = installmentToUpdate.UUID,
+                Status = installmentToUpdate.Status,
+                ContractUuid = installmentToUpdate.ContractUuid,
+                DueDate = installmentToUpdate.DueDate,
+                AntecipationStatus = AntecipationStatus.Pending,
+            };
+            var updateResponse = await _installmentBusiness.Update(updateInstallmentDto);
             if (!updateResponse.ApiReponse.OK || updateResponse.ApiReponse is null)
             {
                 return new Response<bool>().Failure(data: default, message: "Failed to update installment.", statusCode: HttpStatusCode.InternalServerError);
@@ -79,8 +87,18 @@ namespace Paynext.Application.UseCases
                     continue; // Skip if not antecipated or already actioned
                 }
                 installmentData.ActionedByUserUuiD = userUuid;
+                installmentData.AntecipationStatus = installment.IsAccepted ? AntecipationStatus.Approved : AntecipationStatus.Rejected;
                 installmentData.IsAntecipated = installment.IsAccepted;
-                await _installmentBusiness.Update(installmentData.Adapt<UpdateInstallmentDto>());
+                UpdateInstallmentDto updateInstallmentDto = new()
+                {
+                    UUID = installmentData.UUID,
+                    Status = installmentData.Status,
+                    ContractUuid = installmentData.ContractUuid,
+                    DueDate = installmentData.DueDate,
+                    AntecipationStatus = installmentData.AntecipationStatus,
+                    IsAntecipated = installmentData.IsAntecipated,
+                };
+                await _installmentBusiness.Update(updateInstallmentDto);
             }
         }
 
