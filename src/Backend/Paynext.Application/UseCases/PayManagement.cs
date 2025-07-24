@@ -101,7 +101,32 @@ namespace Paynext.Application.UseCases
                 await _installmentBusiness.Update(updateInstallmentDto);
             }
         }
+        public async Task<Response<List<ContractInformationDto>>> ListUserAntecipationRequests(Guid guid, int pageNumber, int pageSize)
+        {
+            var installments = await _installmentBusiness.GetUserAntecipateToActione(guid, pageNumber, pageSize);
+            if (installments.ApiReponse is null || !installments.ApiReponse.OK)
+            {
+                return new Response<List<ContractInformationDto>>().Success(data: default, message: "No antecipation requests found.", statusCode: HttpStatusCode.OK);
+            }
+            List<ContractInformationDto> contracts = [];
+            foreach (var installment in installments?.ApiReponse?.Data)
+            {
+                var installmentDto = installment.Adapt<InstallmentDto>();
+                ContractInformationDto contract = new()
+                {
+                    ClientId = installment.Contract.User.UUID,
+                    ContractNumber = installment.Contract.ContractNumber,
+                    ClientName = installment.Contract.User.FullName,
+                    ContractId = installment.Contract.UUID,
+                    Installments = [installmentDto]
+                };
+                contracts.Add(contract);
+            }
 
+            return new Response<List<ContractInformationDto>>()
+                .Success(data: contracts, message: "Antecipation requests retrieved successfully.", statusCode: HttpStatusCode.OK);
+
+        }
         public async Task<Response<List<ContractInformationDto>>> ListAllAntecipationRequests(int pageNumber, int pageSize)
         {
             var installments = await _installmentBusiness.GetAllAntecipateToActione(pageNumber, pageSize);

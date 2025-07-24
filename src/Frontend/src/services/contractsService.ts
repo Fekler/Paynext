@@ -27,4 +27,10 @@ export const contractsService = {
     });
     return response.data;
   },
+  getAdvancedRequests: async (pagerNumber = 1, pageSize = 10) => {
+    const response = await api.get('/api/advanced-request', {
+      params: { pagerNumber, pageSize }
+    });
+    return response.data;
+  },
 }; 

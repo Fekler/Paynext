@@ -10,6 +10,7 @@ interface Contract {
   userUuid: string;
   initialAmount: number;
   remainingValue: number;
+  installmentsCount: number;
   startDate: string;
   endDate: string;
   isFinished: boolean;
@@ -77,7 +78,7 @@ const MeusContratos: React.FC = () => {
               <TableRow key={contract.uuid}>
                 <TableCell>{contract.contractNumber}</TableCell>
                 <TableCell>{contract.initialAmount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</TableCell>
-                <TableCell>{contract.installments?.length ?? 0}</TableCell>
+                <TableCell>{contract.installmentsCount ?? 0}</TableCell>
                 <TableCell>{contract.startDate && new Date(contract.startDate).toLocaleDateString()}</TableCell>
                 <TableCell>{contract.endDate && new Date(contract.endDate).toLocaleDateString()}</TableCell>
                 <TableCell>{contract.isActive ? 'Sim' : 'Não'}</TableCell>

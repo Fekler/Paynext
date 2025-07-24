@@ -6,6 +6,7 @@ import UsuariosList from './pages/UsuariosList';
 import ContractsList from './pages/ContractsList';
 import ContractDetail from './pages/ContractDetail';
 import MeusContratos from './pages/MeusContratos';
+import MinhasSolicitacoes from './pages/MinhasSolicitacoes';
 import { useSelector } from 'react-redux';
 import type { RootState } from './store';
 
@@ -41,6 +42,11 @@ function App() {
         <Route path="/meus-contratos" element={
           <ProtectedRoute allowedRoles={["Client"]}>
             <MeusContratos />
+          </ProtectedRoute>
+        } />
+        <Route path="/meus-parcelamentos" element={
+          <ProtectedRoute allowedRoles={["Client"]}>
+            <MinhasSolicitacoes />
           </ProtectedRoute>
         } />
         <Route path="*" element={<Navigate to={user ? (user.role === 'Admin' ? '/usuarios' : '/meus-contratos') : '/login'} replace />} />

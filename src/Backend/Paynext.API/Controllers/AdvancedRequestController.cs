@@ -9,7 +9,7 @@ namespace Paynext.API.Controllers
     [ApiController]
     [Route("api/advanced-request")]
     [ApiVersion("1.0")]
-    public class AdvancedRequestController (IPayManagement payManagement): ControllerBase
+    public class AdvancedRequestController(IPayManagement payManagement) : ControllerBase
     {
         private readonly IPayManagement _payManagement = payManagement;
 
@@ -58,7 +58,7 @@ namespace Paynext.API.Controllers
             return StatusCode((int)response.StatusCode, response.ApiReponse);
         }
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Client")]
         public async Task<IActionResult> GetAllAntecipationRequest(int pagerNumber, int pageSize)
         {
             // Check if the user is authenticated
@@ -66,7 +66,6 @@ namespace Paynext.API.Controllers
             {
                 return Unauthorized();
             }
-            // Check if the user has the required role
 
             // Extract user ID from claims
             var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
@@ -74,7 +73,12 @@ namespace Paynext.API.Controllers
             {
                 return Unauthorized(Error.UNAUTHORIZED);
             }
-            // Process the request using the business logic layer
+            if (HttpContext.User.IsInRole("Client"))
+            {
+                var responseClient = await _payManagement.ListUserAntecipationRequests(userId, pagerNumber, pageSize);
+                return StatusCode((int)responseClient.StatusCode, responseClient.ApiReponse);
+            }
+
             var response = await _payManagement.ListAllAntecipationRequests(pagerNumber, pageSize);
             return StatusCode((int)response.StatusCode, response.ApiReponse);
         }

@@ -58,7 +58,7 @@ const ContractDetail: React.FC = () => {
         <Button variant="outlined" onClick={() => navigate(-1)} className="mb-4">Voltar</Button>
         <Typography variant="h5" gutterBottom>Detalhes do Contrato</Typography>
         <Typography><b>Número:</b> {contract.contractNumber}</Typography>
-        <Typography><b>Cliente:</b> {contract.user?.fullName} ({contract.user?.email})</Typography>
+        <Typography><b>Cliente:</b> {contract.userName} </Typography>
         <Typography><b>Valor Inicial:</b> {contract.initialAmount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Typography>
         <Typography><b>Valor Restante:</b> {contract.remainingValue?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Typography>
         <Typography><b>Início:</b> {contract.startDate && new Date(contract.startDate).toLocaleDateString()}</Typography>
@@ -92,7 +92,12 @@ const ContractDetail: React.FC = () => {
                   />
                   <Button
                     variant="contained"
-                    color="primary"
+                    color={
+                      inst.antecipationStatus === 1 ? 'warning' :
+                      inst.antecipationStatus === 2 ? 'success' :
+                      inst.antecipationStatus === 3 ? 'error' :
+                      'primary'
+                    }
                     size="small"
                     style={{ marginLeft: 16 }}
                     onClick={() => handleRequestAdvance(inst.uuid)}
@@ -105,7 +110,10 @@ const ContractDetail: React.FC = () => {
                     }
                     hidden={user?.role !== 'Client'}
                   >
-                    Solicitar Antecipação
+                    {inst.antecipationStatus === 1 && 'Solicitação Pendente'}
+                    {inst.antecipationStatus === 2 && 'Solicitação Aprovada'}
+                    {inst.antecipationStatus === 3 && 'Solicitação Rejeitada'}
+                    {(inst.antecipationStatus == null || inst.antecipationStatus === 0) && 'Solicitar Antecipação'}
                   </Button>
                 </ListItem>
               ))}

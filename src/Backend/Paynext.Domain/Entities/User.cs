@@ -31,7 +31,7 @@ namespace Paynext.Domain.Entities
                 .When(string.IsNullOrWhiteSpace(FullName) || FullName?.Length > Const.NAME_MAX_LENGTH, Error.INVALID_NAME)
                 .When(string.IsNullOrWhiteSpace(Email) || !string.IsNullOrWhiteSpace(Email) && !Validations.Rules.IsValidEmail(Email), Error.INVALID_EMAIL)
                 .When(string.IsNullOrWhiteSpace(Phone) || !string.IsNullOrWhiteSpace(Phone) && !Validations.Rules.IsValidPhone(Phone), Error.INVALID_PHONE)
-                .When(string.IsNullOrWhiteSpace(Password) || !Validations.Rules.IsValidPassword(Password), Error.INVALID_PASSWORD)
+                //.When(string.IsNullOrWhiteSpace(Password) || !Validations.Rules.IsValidPassword(Password), Error.INVALID_PASSWORD)
                 .When(string.IsNullOrWhiteSpace(Document), Error.INVALID_DOCUMENT)
                 .ThrowExceptionIfExists();
         }

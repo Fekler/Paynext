@@ -191,6 +191,23 @@ namespace Paynext.Application.Business
                 return new Response<bool>().Failure(false, message: $"Error updating installment: {ex.Message}", statusCode: System.Net.HttpStatusCode.InternalServerError);
             }
         }
+        public async Task<Response<List<Installment>>> GetUserAntecipateToActione(Guid userUuid,int pageNumber, int pageSize)
+        {
+            try
+            {
+                var installments = await _repository.GetUserAntecipateToActione(userUuid,pageNumber, pageSize);
+                if (installments == null || installments.Count==0)
+                {
+                    return new Response<List<Installment>>().Failure(null, message: "No antecipated installments found", statusCode: System.Net.HttpStatusCode.NotFound);
+                }
+                return new Response<List<Installment>>().Success(data: installments, message: "Antecipated installments retrieved successfully", statusCode: System.Net.HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving antecipated installments.");
+                return new Response<List<Installment>>().Failure(null, message: $"Error retrieving antecipated installments: {ex.Message}", statusCode: System.Net.HttpStatusCode.InternalServerError);
+            }
+        }
         public async Task<Response<List<Installment>>> GetAllAntecipateToActione(int pageNumber, int pageSize)
         {
             try

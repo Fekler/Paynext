@@ -11,5 +11,6 @@ namespace Paynext.Application.Interfaces
         Task<Response<List<InstallmentDto>>> GetByContract(Guid contractUuid);
         Task<Response<List<InstallmentDto>>> GetAllByContractIdAndStatus(Guid contractUuid, InstallmentStatus status);
         Task<Response<List<Installment>>> GetAllAntecipateToActione(int pageNumber, int pageSize);
+        Task<Response<List<Installment>>> GetUserAntecipateToActione(Guid userUuid, int pageNumber, int pageSize);
     }
 }
