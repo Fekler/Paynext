@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Paynext.Application.Dtos.Entities.Contract;
 using Paynext.Application.Dtos.Entities.Installment;
+using Paynext.Application.Dtos.Entities.User;
 using Paynext.Application.Interfaces;
 using Paynext.Domain.Entities;
 using Paynext.Domain.Interfaces.Repositories;
@@ -148,6 +149,7 @@ namespace Paynext.Application.Business
                 List<ContractDto> contractDtos = [];
                 foreach (var contract in contracts)
                 {
+
                     var contracdto = new ContractDto()
                     {
                         UUID = contract.UUID,
@@ -205,9 +207,40 @@ namespace Paynext.Application.Business
                     }
                 }
                 var contract = await _repository.GetFullInformationByUuid(contractUuid);
-                var contractDto = contract.Adapt<ContractDto>();
+                var contracdto = new ContractDto()
+                {
+                    UUID = contract.UUID,
+                    ContractNumber = contract.ContractNumber,
+                    UserUuid = contract.UserUuid,
+                    UserName = contract.User.FullName,
+                    IsFinished = contract.IsFinished,
+                    StartDate = contract.StartDate,
+                    EndDate = contract.EndDate,
+                    InitialAmount = contract.InitialAmount,
+                    IsActive = contract.IsActive,
+                    InstallmentsCount = contract.Installments.Count,
+                    RemainingValue = contract.Installments
+                    .Where(i => i.Status !=  Domain.Entities._bases.Enums.InstallmentStatus.Paid)
+                    .Sum(i => i.Value),
+                    //Installments = []
+                    Installments =
+                    [.. contract.Installments.Select(i => new InstallmentDto
+                    {
+                        UUID = i.UUID,
+                        Value = i.Value,
+                        DueDate = i.DueDate,
+                        IsAntecipated = i.IsAntecipated,
+                        Status = i.Status,
+                        PaymentDate = i.PaymentDate,
+                        ContractUuid = i.ContractUuid,
+                        AntecipationStatus = i.AntecipationStatus,
+
+                    }).OrderBy(i=> i.DueDate)]
+                }
+;
+                //var contractDto = contract.Adapt<ContractDto>();
                 return new Response<ContractDto>()
-                    .Success(data: contractDto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
+                    .Success(data: contracdto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
 
             }
             catch (Exception ex)
@@ -255,10 +288,46 @@ namespace Paynext.Application.Business
                 //    return new Response<List<ContractDto>>()
                 //        .Sucess(data: data, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
                 //}
-                var contracts = await _repository.GetAllActiveContracts();
-                var contracstDto = contracts.Adapt<List<ContractDto>>();
+                var contracts = await _repository.GetAllFullInformation();
+                //var contracstDto = contracts.Adapt<List<ContractDto>>();
+                List<ContractDto> contractDtos = [];
+                foreach (var contract in contracts)
+                {
+
+                    var contracdto = new ContractDto()
+                    {
+                        UUID = contract.UUID,
+                        ContractNumber = contract.ContractNumber,
+                        UserUuid = contract.UserUuid,
+                        UserName = contract.User.FullName,
+                        IsFinished = contract.IsFinished,
+                        StartDate = contract.StartDate,
+                        EndDate = contract.EndDate,
+                        InitialAmount = contract.InitialAmount,
+                        IsActive = contract.IsActive,
+                        InstallmentsCount = contract.Installments.Count,
+                        RemainingValue = contract.Installments
+                        .Where(i => i.Status !=  Domain.Entities._bases.Enums.InstallmentStatus.Paid)
+                        .Sum(i => i.Value),
+                        Installments = []
+                        //[.. contract.Installments.Select(i => new InstallmentDto
+                        //{
+                        //    UUID = i.UUID,
+                        //    Value = i.Value,
+                        //    DueDate = i.DueDate,
+                        //    IsAntecipated = i.IsAntecipated,
+                        //    Status = i.Status,
+                        //    PaymentDate = i.PaymentDate,
+                        //    ContractUuid = i.ContractUuid,
+                        //    AntecipationStatus = i.AntecipationStatus,
+
+                        //}).OrderBy(i=> i.DueDate)]
+                    }
+                    ;
+                    contractDtos.Add(contracdto);
+                }
                 return new Response<List<ContractDto>>()
-                    .Success(data: contracstDto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
+                    .Success(data: contractDtos, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
 
             }
             catch (Exception ex)
