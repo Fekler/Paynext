@@ -136,7 +136,7 @@ namespace Paynext.Application.Business
         {
             try
             {
-                var contracts = await _repository.GetByUserUuid(userUuid);
+                var contracts = await _repository.ContractDtoByUserUuid(userUuid);
                 //var contractsDto = contracts.Adapt<List<ContractDto>>();
 
                 //foreach (var contractDto in contractsDto)
