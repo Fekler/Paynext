@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem, FormControlLabel, Switch } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem, FormControlLabel, Switch, Typography } from '@mui/material';
 import { contractsService } from '../services/contractsService';
 import api from '../api';
 import dayjs from 'dayjs';
@@ -101,6 +101,7 @@ const ContractFormModal: React.FC<ContractFormModalProps> = ({ open, onClose, on
           <TextField label="Número do Contrato" name="contractNumber" value={form.contractNumber} onChange={handleChange} required fullWidth />
           <TextField label="Descrição" name="description" value={form.description} onChange={handleChange} fullWidth />
           <TextField label="Valor" name="amount" value={form.amount} onChange={handleChange} type="number" required fullWidth />
+          <Typography variant="caption" color="textSecondary" className="mb-2">{Number(form.amount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Typography>
           <TextField label="Data de Início" name="startDate" value={form.startDate} onChange={handleChange} type="date" required fullWidth InputLabelProps={{ shrink: true }} />
           <TextField label="Data de Fim" name="endDate" value={form.endDate} onChange={handleChange} type="date" fullWidth InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true }} disabled />
           <TextField label="Parcelas" name="installmentCount" value={form.installmentCount} onChange={handleChange} type="number" required fullWidth />

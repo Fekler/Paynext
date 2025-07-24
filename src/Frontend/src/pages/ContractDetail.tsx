@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Typography, Paper, List, ListItem, ListItemText, Button, CircularProgress, Box } from '@mui/material';
-import api from '../api';
+import { Typography, Paper, List, ListItem, ListItemText, Button, CircularProgress, Box, Pagination } from '@mui/material';
+import { contractsService } from '../services/contractsService';
 
 const ContractDetail: React.FC = () => {
   const { uuid } = useParams<{ uuid: string }>();
@@ -9,13 +9,16 @@ const ContractDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 30;
 
   useEffect(() => {
     const fetchContract = async () => {
       setLoading(true);
       try {
-        const response = await api.get(`/api/v1/Contracts/${uuid}`);
-        setContract(response.data.data || response.data);
+        if (!uuid) throw new Error('UUID inválido');
+        const data = await contractsService.getById(uuid);
+        setContract(data);
       } catch {
         setError('Erro ao buscar detalhes do contrato');
       } finally {
@@ -28,6 +31,9 @@ const ContractDetail: React.FC = () => {
   if (loading) return <Box className="flex justify-center mt-10"><CircularProgress /></Box>;
   if (error) return <Typography color="error">{error}</Typography>;
   if (!contract) return null;
+
+  const paginatedInstallments = contract?.installments?.slice((page - 1) * itemsPerPage, page * itemsPerPage) || [];
+  const pageCount = contract?.installments ? Math.ceil(contract.installments.length / itemsPerPage) : 1;
 
   return (
     <Box className="min-h-screen w-screen flex flex-col items-center bg-gray-100 py-8">
@@ -44,16 +50,38 @@ const ContractDetail: React.FC = () => {
         <Typography><b>Finalizado:</b> {contract.isFinished ? 'Sim' : 'Não'}</Typography>
         <Typography variant="h6" className="mt-6">Parcelas</Typography>
         {contract.installments && contract.installments.length > 0 ? (
-          <List>
-            {contract.installments.map((inst: any, idx: number) => (
-              <ListItem key={inst.uuid || idx} divider>
-                <ListItemText
-                  primary={`Vencimento: ${new Date(inst.dueDate).toLocaleDateString()} - Valor: R$ ${inst.value}`}
-                  secondary={`Status: ${inst.status === 0 ? 'Pendente' : inst.status === 1 ? 'Pago' : 'Outro'}`}
-                />
-              </ListItem>
-            ))}
-          </List>
+          <>
+            <List>
+              {paginatedInstallments.map((inst: any, idx: number) => (
+                <ListItem key={inst.uuid || idx} divider className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                  <ListItemText
+                    primary={
+                      <span className="flex flex-col md:flex-row md:items-center md:gap-4">
+                        <span className="font-semibold">Vencimento: {new Date(inst.dueDate).toLocaleDateString()}</span>
+                        <span className="font-bold text-green-700">Valor: {Number(inst.value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                      </span>
+                    }
+                    secondary={
+                      <span className={
+                        inst.status === 1
+                          ? 'text-green-600 font-semibold'
+                          : inst.status === 0
+                          ? 'text-yellow-600 font-semibold'
+                          : 'text-gray-500'
+                      }>
+                        Status: {inst.status === 0 ? 'Pendente' : inst.status === 1 ? 'Pago' : 'Outro'}
+                      </span>
+                    }
+                  />
+                </ListItem>
+              ))}
+            </List>
+            {pageCount > 1 && (
+              <Box className="flex justify-center mt-4">
+                <Pagination count={pageCount} page={page} onChange={(_, value) => setPage(value)} color="primary" />
+              </Box>
+            )}
+          </>
         ) : (
           <Typography>Nenhuma parcela encontrada.</Typography>
         )}
