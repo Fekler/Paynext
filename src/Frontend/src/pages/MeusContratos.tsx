@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, CircularProgress, IconButton, Tooltip, Snackbar, Alert as MuiAlert } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, CircularProgress, IconButton, Tooltip, Snackbar, Alert as MuiAlert, TextField, Button } from '@mui/material';
 import { Visibility } from '@mui/icons-material';
 import api from '../api';
 import { useNavigate } from 'react-router-dom';
+import SearchIcon from '@mui/icons-material/Search';
 
 interface Contract {
   uuid: string;
@@ -23,6 +24,8 @@ const MeusContratos: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [snackbar, setSnackbar] = useState<{open: boolean, message: string, severity: 'success'|'error'}>({open: false, message: '', severity: 'success'});
+  const [search, setSearch] = useState('');
+  const [searching, setSearching] = useState(false);
   const navigate = useNavigate();
 
   const fetchContracts = async () => {
@@ -37,9 +40,27 @@ const MeusContratos: React.FC = () => {
     }
   };
 
+  const handleSearch = async () => {
+    if (!search.trim()) {
+      fetchContracts();
+      return;
+    }
+    setSearching(true);
+    try {
+      const result = await api.get(`/api/v1/Contracts/contractNumber/${search}`);
+      setContracts(result.data.data ? [result.data.data] : result.data ? [result.data] : []);
+    } catch {
+      setContracts([]);
+    } finally {
+      setSearching(false);
+    }
+  };
+
   useEffect(() => {
     fetchContracts();
   }, []);
+
+  const filteredContracts = contracts;
 
   if (loading) return <div className="flex justify-center mt-10"><CircularProgress /></div>;
   if (error) return <Typography color="error">{error}</Typography>;
@@ -55,6 +76,19 @@ const MeusContratos: React.FC = () => {
     <div className="min-h-screen w-screen flex flex-col items-center bg-gray-100">
       <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-6xl mt-8 mb-4 gap-4 px-2 md:px-8">
         <Typography variant="h6" color='black'>Meus Contratos</Typography>
+      </div>
+      <div className="w-full max-w-6xl flex flex-col md:flex-row gap-4 mb-4 px-2 md:px-8">
+        <TextField
+          label="Buscar por Número do Contrato"
+          variant="outlined"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          onKeyDown={e => { if (e.key === 'Enter') handleSearch(); }}
+          fullWidth
+        />
+        <Button variant="contained" color="primary" startIcon={<SearchIcon />} onClick={handleSearch} disabled={searching}>
+          Buscar
+        </Button>
       </div>
       <TableContainer
         component={Paper}
@@ -74,7 +108,7 @@ const MeusContratos: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {contracts.map((contract) => (
+            {filteredContracts.map((contract) => (
               <TableRow key={contract.uuid}>
                 <TableCell>{contract.contractNumber}</TableCell>
                 <TableCell>{contract.initialAmount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</TableCell>

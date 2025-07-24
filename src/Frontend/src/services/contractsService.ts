@@ -37,4 +37,8 @@ export const contractsService = {
     const response = await api.put('/api/advanced-request/approve', actions);
     return response.data;
   },
+  getByContractNumber: async (number: string) => {
+    const response = await api.get(`/api/v1/Contracts/contractNumber/${number}`);
+    return response.data.data || response.data;
+  },
 }; 

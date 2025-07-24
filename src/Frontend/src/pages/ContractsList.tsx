@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, CircularProgress, Button, IconButton, Tooltip, Snackbar, Alert as MuiAlert } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, CircularProgress, Button, IconButton, Tooltip, Snackbar, Alert as MuiAlert, TextField } from '@mui/material';
 import { Add, Visibility } from '@mui/icons-material';
 import api from '../api';
 import ContractFormModal from './ContractFormModal';
 import { useNavigate } from 'react-router-dom';
+import SearchIcon from '@mui/icons-material/Search';
 
 interface Contract {
   uuid: string;
@@ -30,6 +31,8 @@ const ContractsList: React.FC = () => {
   const [error, setError] = useState('');
   const [snackbar, setSnackbar] = useState<{open: boolean, message: string, severity: 'success'|'error'}>({open: false, message: '', severity: 'success'});
   const [modalOpen, setModalOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const [searching, setSearching] = useState(false);
   const navigate = useNavigate();
 
   const fetchContracts = async () => {
@@ -61,6 +64,24 @@ const ContractsList: React.FC = () => {
     setSnackbar({open: true, message: 'Contrato salvo com sucesso!', severity: 'success'});
   };
 
+  const handleSearch = async () => {
+    if (!search.trim()) {
+      fetchContracts();
+      return;
+    }
+    setSearching(true);
+    try {
+      const result = await api.get(`/api/v1/Contracts/contractNumber/${search}`);
+      setContracts(result.data.data ? [result.data.data] : result.data ? [result.data] : []);
+    } catch {
+      setContracts([]);
+    } finally {
+      setSearching(false);
+    }
+  };
+
+  const filteredContracts = contracts;
+
   if (loading) return <div className="flex justify-center mt-10"><CircularProgress /></div>;
   if (error) return <Typography color="error">{error}</Typography>;
   if (!contracts || contracts.length === 0) {
@@ -90,6 +111,19 @@ const ContractsList: React.FC = () => {
           Adicionar Contrato
         </Button>
       </div>
+      <div className="w-full max-w-6xl flex flex-col md:flex-row gap-4 mb-4 px-2 md:px-8">
+        <TextField
+          label="Buscar por Número do Contrato"
+          variant="outlined"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          onKeyDown={e => { if (e.key === 'Enter') handleSearch(); }}
+          fullWidth
+        />
+        <Button variant="contained" color="primary" startIcon={<SearchIcon />} onClick={handleSearch} disabled={searching}>
+          Buscar
+        </Button>
+      </div>
       <TableContainer
         component={Paper}
         className="w-full max-w-6xl overflow-x-auto"
@@ -109,7 +143,7 @@ const ContractsList: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {contracts.map((contract) => (
+            {filteredContracts.map((contract) => (
               <TableRow key={contract.uuid}>
                 <TableCell>{contract.contractNumber}</TableCell>
                 <TableCell>{contract.userName}</TableCell>

@@ -47,7 +47,7 @@ namespace Paynext.API.Controllers
             return StatusCode((int)response.StatusCode, response.ApiReponse);
         }
         [Authorize(Roles = "Admin,Client")]
-        [HttpGet("{contractNumber:string}")]
+        [HttpGet("contractNumber/{contractNumber}")]
         public async Task<IActionResult> GetByContractNumber(string contractNumber)
         {
             var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
