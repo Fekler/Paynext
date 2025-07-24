@@ -12,6 +12,6 @@ namespace Paynext.Domain.Interfaces.Repositories
 
         Task<IEnumerable<Contract>> GetByUserUuid(Guid userUuid);
         Task<List<Contract>> GetAllFullInformation();
-        Task<List<Contract>> ContractFullInformationByUserUuid(Guid uuid);
+        Task<List<Contract>> ContractDtoByUserUuid(Guid uuid);
     }
 }
