@@ -43,10 +43,12 @@ const ContractDetail: React.FC = () => {
 
   const handleRequestAdvance = async (installmentId: string) => {
     try {
-      await contractsService.advancedRequest(installmentId);
-      setSnackbar({open: true, message: 'Solicitação enviada com sucesso!', severity: 'success'});
+      const result = await contractsService.advancedRequest(installmentId);
+      setSnackbar({open: true, message: result?.message || 'Solicitação enviada com sucesso!', severity: result?.ok === false ? 'error' : 'success'});
     } catch (err: any) {
-      setSnackbar({open: true, message: 'Erro ao solicitar antecipação.', severity: 'error'});
+      let msg = 'Erro ao solicitar antecipação.';
+      if (err?.response?.data?.message) msg = err.response.data.message;
+      setSnackbar({open: true, message: msg, severity: 'error'});
     }
   };
 

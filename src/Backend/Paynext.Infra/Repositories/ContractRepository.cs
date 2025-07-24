@@ -5,6 +5,7 @@ using Paynext.Domain.Entities;
 using Paynext.Domain.Interfaces.Repositories;
 using Paynext.Infra.Context;
 using Paynext.Infra.Repositories._bases;
+using System;
 
 namespace Paynext.Infra.Repositories
 {
@@ -29,7 +30,7 @@ namespace Paynext.Infra.Repositories
         {
             return await _dbSet
                 .Where(c => c.UUID == uuid)
-                .Include(c => c.Installments.OrderBy(i=> i.DueDate))
+                .Include(c => c.Installments.OrderBy(i => i.DueDate))
                     .ThenInclude(i => i.ActionedByUser)
                 .Include(c => c.User)
                 .FirstOrDefaultAsync();
@@ -86,6 +87,23 @@ namespace Paynext.Infra.Repositories
 
                 }).OrderBy(i=> i.DueDate)]
             };
+        }
+        public async Task<List<Contract>> ContractDtoByUserUuid(Guid uuid)
+        {
+
+            var contracts = await _dbSet
+                .Where(c => c.UserUuid == uuid)
+                .Include(c => c.Installments.OrderBy(i => i.DueDate))
+                    .ThenInclude(i => i.ActionedByUser)
+                .Include(c => c.User)
+                .ToListAsync();
+            if (contracts == null)
+            {
+                return null;
+            }
+
+            return contracts;
+
         }
     }
 }

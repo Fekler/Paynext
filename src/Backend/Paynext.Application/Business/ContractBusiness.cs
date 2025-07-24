@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using Microsoft.Extensions.Logging;
 using Paynext.Application.Dtos.Entities.Contract;
+using Paynext.Application.Dtos.Entities.Installment;
 using Paynext.Application.Interfaces;
 using Paynext.Domain.Entities;
 using Paynext.Domain.Interfaces.Repositories;
@@ -136,9 +137,46 @@ namespace Paynext.Application.Business
             try
             {
                 var contracts = await _repository.GetByUserUuid(userUuid);
-                var contractsDto = contracts.Adapt<List<ContractDto>>();
+                //var contractsDto = contracts.Adapt<List<ContractDto>>();
+
+                //foreach (var contractDto in contractsDto)
+                //{
+                //    contractDto.UserName = contractDto.UserName ?? "Unknown User";
+                //    contractDto.Installments = contractDto.Installments?.OrderBy(i => i.DueDate).ToList() ?? [];
+
+                //}
+                List<ContractDto> contractDtos = [];
+                foreach (var contract in contracts)
+                {
+                    var contracdto = new ContractDto()
+                    {
+                        UUID = contract.UUID,
+                        ContractNumber = contract.ContractNumber,
+                        UserUuid = contract.UserUuid,
+                        UserName = contract.User.FullName,
+                        InstallmentsCount = contract.Installments.Count,
+                        RemainingValue = contract.Installments
+                        .Where(i => i.Status !=  Domain.Entities._bases.Enums.InstallmentStatus.Paid)
+                        .Sum(i => i.Value),
+                        Installments = []
+                        //[.. contract.Installments.Select(i => new InstallmentDto
+                        //{
+                        //    UUID = i.UUID,
+                        //    Value = i.Value,
+                        //    DueDate = i.DueDate,
+                        //    IsAntecipated = i.IsAntecipated,
+                        //    Status = i.Status,
+                        //    PaymentDate = i.PaymentDate,
+                        //    ContractUuid = i.ContractUuid,
+                        //    AntecipationStatus = i.AntecipationStatus,
+
+                        //}).OrderBy(i=> i.DueDate)]
+                    }
+                    ;
+                    contractDtos.Add(contracdto);
+                }
                 return new Response<List<ContractDto>>()
-                    .Success(data: contractsDto, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
+                    .Success(data: contractDtos, message: "Contracts retrieved successfully", statusCode: HttpStatusCode.OK);
 
             }
             catch (Exception ex)
