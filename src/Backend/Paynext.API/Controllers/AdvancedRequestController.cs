@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Paynext.Application.Dtos.Entities.Installment;
 using Paynext.Application.Interfaces;
 using Paynext.Domain.Errors;
 using System.Security.Claims;
@@ -103,6 +104,25 @@ namespace Paynext.API.Controllers
             }
             // Process the request using the business logic layer
             var response = await _payManagement.GetInstallment(guid);
+            return StatusCode((int)response.StatusCode, response.ApiReponse);
+        }
+        [HttpPut("approve"), Authorize]
+        public async Task<IActionResult> ApproveRequest([FromBody] List<ActioneInstallment> installments)
+        {
+
+            // Check if the user has the required role
+            if (!HttpContext.User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+            // Extract user ID from claims
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+            {
+                return Unauthorized(Error.UNAUTHORIZED);
+            }
+            // Process the request using the business logic layer
+            var response = await _payManagement.ActioneAntecipationRequests(installments, userId);
             return StatusCode((int)response.StatusCode, response.ApiReponse);
         }
     }

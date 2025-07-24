@@ -10,7 +10,7 @@ namespace Paynext.Application.Interfaces
         Task<Response<List<ContractInformationDto>>> ListAllAntecipationRequests(int pageNumber, int pageSize);
         Task<Response<List<ContractInformationDto>>> ListUserAntecipationRequests(Guid guid, int pageNumber, int pageSize);
 
-        Task ActioneAntecipationRequests(List<ActioneInstallment> installments, Guid userUuid);
+        Task<Response<bool>> ActioneAntecipationRequests(List<ActioneInstallment> installments, Guid userUuid);
         Task<Response<ContractInformationDto>> GetInstallment(Guid guid);
     }
 }

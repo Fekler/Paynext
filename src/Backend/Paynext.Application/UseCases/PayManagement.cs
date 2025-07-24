@@ -72,34 +72,48 @@ namespace Paynext.Application.UseCases
         }
 
 
-        public async Task ActioneAntecipationRequests(List<ActioneInstallment> installments, Guid userUuid)
+        public async Task<Response<bool>> ActioneAntecipationRequests(List<ActioneInstallment> installments, Guid userUuid)
         {
-            foreach (var installment in installments)
+            try
             {
-                var installmentEntity = await _installmentBusiness.GetEntity(installment.InstallmentUuid);
-                if (!installmentEntity.ApiReponse.OK || installmentEntity.ApiReponse is null || installmentEntity.ApiReponse.Data is null)
+                bool IsOK = false;
+                foreach (var installment in installments)
                 {
-                    continue; // Skip if installment not found
+                    var installmentEntity = await _installmentBusiness.GetEntity(installment.InstallmentUuid);
+                    if (!installmentEntity.ApiReponse.OK || installmentEntity.ApiReponse is null || installmentEntity.ApiReponse.Data is null)
+                    {
+                        continue; // Skip if installment not found
+                    }
+                    var installmentData = installmentEntity.ApiReponse.Data;
+                    if (!installmentData.IsAntecipated || installmentData.ActionedByUser != null)
+                    {
+                        continue; // Skip if not antecipated or already actioned
+                    }
+                    installmentData.ActionedByUserUuiD = userUuid;
+                    installmentData.AntecipationStatus = installment.IsAccepted ? AntecipationStatus.Approved : AntecipationStatus.Rejected;
+                    installmentData.IsAntecipated = installment.IsAccepted;
+                    UpdateInstallmentDto updateInstallmentDto = new()
+                    {
+                        UUID = installmentData.UUID,
+                        Status = installmentData.Status,
+                        ContractUuid = installmentData.ContractUuid,
+                        DueDate = installmentData.DueDate,
+                        AntecipationStatus = installmentData.AntecipationStatus,
+                        IsAntecipated = installmentData.IsAntecipated,
+                    };
+                    var updated = await _installmentBusiness.Update(updateInstallmentDto);
+                    IsOK = updated.ApiReponse?.OK ?? false;
                 }
-                var installmentData = installmentEntity.ApiReponse.Data;
-                if (!installmentData.IsAntecipated || installmentData.ActionedByUser != null)
-                {
-                    continue; // Skip if not antecipated or already actioned
-                }
-                installmentData.ActionedByUserUuiD = userUuid;
-                installmentData.AntecipationStatus = installment.IsAccepted ? AntecipationStatus.Approved : AntecipationStatus.Rejected;
-                installmentData.IsAntecipated = installment.IsAccepted;
-                UpdateInstallmentDto updateInstallmentDto = new()
-                {
-                    UUID = installmentData.UUID,
-                    Status = installmentData.Status,
-                    ContractUuid = installmentData.ContractUuid,
-                    DueDate = installmentData.DueDate,
-                    AntecipationStatus = installmentData.AntecipationStatus,
-                    IsAntecipated = installmentData.IsAntecipated,
-                };
-                await _installmentBusiness.Update(updateInstallmentDto);
+                return new Response<bool>()
+                    .Success(data: IsOK, message: IsOK ? "Antecipation requests processed successfully." : "Failed to process some antecipation requests.", statusCode: IsOK ? HttpStatusCode.OK : HttpStatusCode.InternalServerError);
             }
+            catch (Exception ex)
+            {
+
+                return new Response<bool>()
+                    .Failure(data: false, message: $"An error occurred while processing antecipation requests: {ex.Message}", statusCode: HttpStatusCode.InternalServerError);
+            }
+
         }
         public async Task<Response<List<ContractInformationDto>>> ListUserAntecipationRequests(Guid guid, int pageNumber, int pageSize)
         {

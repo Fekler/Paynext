@@ -33,4 +33,8 @@ export const contractsService = {
     });
     return response.data;
   },
+  approveAdvancedRequests: async (actions: {InstallmentUuid: string, IsAccepted: boolean}[]) => {
+    const response = await api.put('/api/advanced-request/approve', actions);
+    return response.data;
+  },
 }; 

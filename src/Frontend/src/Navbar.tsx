@@ -13,7 +13,7 @@ const adminTabs = [
   { label: 'Overview', path: '/overview' },
   { label: 'Contratos', path: '/contratos' },
   { label: 'Usuários', path: '/usuarios' },
-  { label: 'Parcelamentos', path: '/parcelamentos' },
+  { label: 'Solicitações', path: '/Requests' },
 ];
 
 const clientTabs = [

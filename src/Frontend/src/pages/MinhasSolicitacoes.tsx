@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Typography, Paper, List, ListItem, ListItemText, CircularProgress, Box, Pagination, Button } from '@mui/material';
 import { contractsService } from '../services/contractsService';
 
-const MinhasSolicitacoes: React.FC = () => {
+const Requests: React.FC = () => {
   const [solicitacoes, setSolicitacoes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -86,4 +86,4 @@ const MinhasSolicitacoes: React.FC = () => {
   );
 };
 
-export default MinhasSolicitacoes; 
+export default Requests; 
