@@ -1,9 +1,9 @@
 # Etapa 1: Build
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY src/Frontend/package.json src/Frontend/package-lock.json ./
 RUN npm ci
-COPY . .
+COPY src/Frontend .
 RUN npm run build
 
 # Etapa 2: Servir o build
